@@ -1,13 +1,5 @@
 #!/usr/bin/python
 
-# used to check ip address
-import netifaces as ni
-
-from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
 ###
 ### Quick Example Script
 ###
@@ -19,26 +11,49 @@ from selenium.webdriver.support import expected_conditions as EC
 ### 4. Browser will attempt to fetch a web page
 ### 5. Browser will report whether there's a gateway
 
-# Check for DHCP lease
+import netifaces as ni
+import sys
+#import logging
+import re
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+
+def error(message):
+        #logging.error('error: ', message)
+        sys.stderr.write("error: %s\n" % message)
+        sys.exit(1)
+
+
+# Check for Commotion DHCP lease
 interfaces = ni.interfaces()
+commotion_client_ip = 0
 for iface in interfaces:
+	# This line has trouble with interface disconnects
 	if ni.ifaddresses(iface)[2][0]['addr'].startswith('10.'):
 		print iface + " has a valid Commotion IP address: " + ni.ifaddresses(iface)[2][0]['addr']
+		commotion_client_ip = ni.ifaddresses(iface)[2][0]['addr']
 	else:
 		print iface + " not valid"
 
-
+if commotion_client_ip == 0:
+	error("No valid Commotion IP address found")
+else:
+	commotion_node_ip = re.sub(r"(\d+)$", '1', commotion_client_ip)
+	print commotion_node_ip
 
 # Create a new instance of the firefox driver
 #driver = webdriver.Firefox()
-
-# go to the node home page
+#
+## go to the node home page
 #driver.get("https://thisnode")
+#try:
+#	verify "LuCI" in driver.title
+#else:
+##print driver.title
 #
-## the page is ajaxy so the title is originally this:
-#print driver.title
-#
-##driver.
 #
 ## This is not actually an input element
 ##inputElement = driver.find_element_by_class_name("app")
@@ -83,3 +98,4 @@ for iface in interfaces:
 ##
 ##finally:
 #####	print "Meat\n!"
+
