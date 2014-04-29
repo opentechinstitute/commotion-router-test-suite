@@ -5,11 +5,14 @@
 ###
 ### Run script after connecting to a commotion AP
 ###
-### 1. Script will open a web browser
-### 2. Browser will navigate to thisnode
-### 3. Browser will check whether any apps are advertising
-### 4. Browser will attempt to fetch a web page
-### 5. Browser will report whether there's a gateway
+### . Script will check all interfaces for commotion lease
+### . Script will open a web browser (Firefox)
+### . Browser will try to connect to thisnode
+### . If thisnode fails, browser will try node IP address
+#
+### . Browser will check whether any apps are advertising
+### . Browser will attempt to fetch a web page
+### . Browser will report whether there's a gateway
 
 import netifaces as ni
 import sys
@@ -31,7 +34,7 @@ def error(message):
 interfaces = ni.interfaces()
 commotion_client_ip = 0
 for iface in interfaces:
-	# This line has trouble with interface disconnects
+	# This statement doesn't handle interface disconnects well
 	if ni.ifaddresses(iface)[2][0]['addr'].startswith('10.'):
 		print iface + " has a valid Commotion IP address: " + ni.ifaddresses(iface)[2][0]['addr']
 		commotion_client_ip = ni.ifaddresses(iface)[2][0]['addr']
@@ -41,20 +44,30 @@ for iface in interfaces:
 if commotion_client_ip == 0:
 	error("No valid Commotion IP address found")
 else:
+	# Use client IP address to determine node's public IP
 	commotion_node_ip = re.sub(r"(\d+)$", '1', commotion_client_ip)
-	print commotion_node_ip
 
 # Create a new instance of the firefox driver
-#driver = webdriver.Firefox()
-#
-## go to the node home page
-#driver.get("https://thisnode")
-#try:
-#	verify "LuCI" in driver.title
-#else:
-##print driver.title
-#
-#
+driver = webdriver.Firefox()
+
+# go to the node home page
+driver.get("https://thisnode")
+
+# Check for the Commotion logo
+try:
+	WebDriverWait(driver, 10).until(
+		EC.presence_of_element_located(By.ID, "device"))
+except:
+	print 'https://thisnode does not resolve. Trying ' + commotion_node_ip
+	driver.get(commotion_node_ip)
+else:
+	element = WebDriverWait(driver, 10).until(
+		EC.presence_of_element_located(By.ID, "device"))
+	assert element
+finally:
+	print driver.title
+
+
 ## This is not actually an input element
 ##inputElement = driver.find_element_by_class_name("app")
 ## get_element_value
