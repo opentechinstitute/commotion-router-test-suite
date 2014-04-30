@@ -14,6 +14,10 @@
 ### . Browser will attempt to fetch a web page
 ### . Browser will report whether there's a gateway
 
+# DEBUG
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
+
 import netifaces as ni
 import sys
 #import logging
@@ -34,12 +38,15 @@ def error(message):
 interfaces = ni.interfaces()
 commotion_client_ip = 0
 for iface in interfaces:
-	# This statement doesn't handle interface disconnects well
-	if ni.ifaddresses(iface)[2][0]['addr'].startswith('10.'):
-		print iface + " has a valid Commotion IP address: " + ni.ifaddresses(iface)[2][0]['addr']
-		commotion_client_ip = ni.ifaddresses(iface)[2][0]['addr']
-	else:
-		print iface + " not valid"
+	try: 
+		if ni.ifaddresses(iface)[2][0]['addr'].startswith('10.'):
+			print iface + " has a valid Commotion IP address: " + ni.ifaddresses(iface)[2][0]['addr']
+			commotion_client_ip = ni.ifaddresses(iface)[2][0]['addr']
+		else:
+			print iface + " not valid"
+	except KeyError:
+		print iface + " has been disconnected"
+		pass
 
 if commotion_client_ip == 0:
 	error("No valid Commotion IP address found")
@@ -67,13 +74,13 @@ else:
 finally:
 	print driver.title
 
-
-## This is not actually an input element
-##inputElement = driver.find_element_by_class_name("app")
-## get_element_value
-##
-##if inputElement:
-##	print str(inputElement)[1:-1]
+# HERE BE DRAGONS
+### This is not actually an input element
+###inputElement = driver.find_element_by_class_name("app")
+### get_element_value
+###
+###if inputElement:
+###	print str(inputElement)[1:-1]
 ##else:
 ##	print "No apps advertised\n"
 ##
