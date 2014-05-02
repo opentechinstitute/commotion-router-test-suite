@@ -9,10 +9,7 @@
 ### . Script will open a web browser (Firefox)
 ### . Browser will try to connect to thisnode
 ### . If thisnode fails, browser will try node IP address
-#
-### . Browser will check whether any apps are advertising
-### . Browser will attempt to fetch a web page
-### . Browser will report whether there's a gateway
+### . Print commotion version described in credits
 
 # DEBUG
 from pprint import pprint
@@ -78,4 +75,3 @@ print credits.get_attribute('innerHTML')
 commotion_version = re.search("Commotion Router Release (\w+\W+)+", credits.get_attribute('innerHTML')).group()
 commotion_version = re.sub(r"(\s+)$", '', commotion_version)
 print commotion_version
-
