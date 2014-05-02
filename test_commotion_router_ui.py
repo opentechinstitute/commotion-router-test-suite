@@ -4,9 +4,10 @@ import sys
 #import logging
 import re
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
+import selenium.common.exceptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 
 # DEBUG
@@ -44,10 +45,21 @@ def GetLease():
 browsers = {"firefox": webdriver.Firefox, "ie": webdriver.Ie, "chrome": webdriver.Chrome, "safari": webdriver.Safari}
 
 class TestCRInputs(unittest.TestCase):
+
+# Add profile/non-profile subclasses to deal with Self-Signed Cert error
+# https://stackoverflow.com/questions/21884004/unittest-data-from-setupclass-to-setup?rq=1
+# https://stackoverflow.com/questions/14044474/python-unittest-setupclass-is-giving-me-trouble-why-cant-i-inherit-like-t
+#
+# Organize better
+# https://docs.python.org/dev/library/unittest.html
+# https://stackoverflow.com/questions/12011091/trying-to-implement-python-testsuite
+
 	def setUp(self):
 		self.driver = browser()
 		# This section should eventually be broken out into it's own test
-		self.driver.thisnode = self.driver.get("https://thisnode")
+		self.driver.thisnode = 'https://thisnode'
+# Change this to a basic DOM check
+		self.driver.get(self.driver.thisnode)
 		try:
         		WebDriverWait(self.driver, 10).until(
                 		EC.presence_of_element_located(By.ID, "device"))
@@ -56,20 +68,29 @@ class TestCRInputs(unittest.TestCase):
 			print 'Fetching node IP address...'
 			commotion_node_ip = GetLease()
 			print 'Trying ' + commotion_node_ip
-        		self.driver.thisnode = self.driver.get(commotion_node_ip)
+        		self.driver.thisnode = 'https://' + commotion_node_ip
+			self.driver.get(self.driver.thisnode)
 		else:
         		element = WebDriverWait(driver, 10).until(
                 		EC.presence_of_element_located(By.ID, "device"))
         		assert element
 		finally:
-        		print driver.title
+        		print self.driver.title
 			print self.driver.thisnode
 
 #	def test_something(self):
 #		d = self.driver
-#		
 #		d.refresh()
-#	def test_page_load
+
+# Change this to a version check or something
+	def test_title(self):
+		d = self.driver
+		d.get(d.thisnode)
+		assert d.title
+
+# Run without profile to test for Self-Signed Cert error
+
+# Run with profile to test Admin functions
 
 	def tearDown(self):
 		self.driver.quit()
