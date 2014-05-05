@@ -1,9 +1,11 @@
+# switch to PEP8
 import unittest
 import netifaces as ni
 import sys
 #import logging
 import re
 from selenium import webdriver
+from selenium.webdriver.firefox import firefox_profile
 import selenium.common.exceptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -42,9 +44,13 @@ def GetLease():
 	return commotion_node_ip
 
 
-browsers = {"firefox": webdriver.Firefox, "ie": webdriver.Ie, "chrome": webdriver.Chrome, "safari": webdriver.Safari}
+# Improve profile handling
+ff_profile = firefox_profile.FirefoxProfile()
+ff_profile.accept_untrusted_certs = True
+browsers = {"firefox": webdriver.Firefox(), "ie": webdriver.Ie, "chrome": webdriver.Chrome, "safari": webdriver.Safari}
 
 class TestCRInputs(unittest.TestCase):
+
 
 # Add profile/non-profile subclasses to deal with Self-Signed Cert error
 # https://stackoverflow.com/questions/21884004/unittest-data-from-setupclass-to-setup?rq=1
@@ -91,6 +97,34 @@ class TestCRInputs(unittest.TestCase):
 # Run without profile to test for Self-Signed Cert error
 
 # Run with profile to test Admin functions
+	def test_admin_pass_screen(self):
+		d = self.driver
+		d.get(d.thisnode + '/cgi-bin/luci/admin')
+		try:
+			WebDriverWait(driver, 10).until(
+				EC.presence_of_element_located(By.ID, "password_focus"))
+		except:
+			print "element not found"
+		element = d.find_element_by_id("password_focus")
+		assertIsNotNone(element)
+
+	def test_admin_login_fail(self):
+		d = self.driver
+		d.get(d.thisnode + '/cgi-bin/luci/admin')
+		d.password = 'wrong_password'
+		try:
+                	element = WebDriverWait(driver, 10).until(
+                        	EC.presence_of_element_located(By.ID, "password_focus"))
+		except:
+			print "element not found"
+		d.find_element_by_id("password_focus")
+		d.send_keys(password)
+		# assert something
+		assert d.title
+
+	def test_admin_input(self):
+		d = self.driver
+		assert d.password
 
 	def tearDown(self):
 		self.driver.quit()
