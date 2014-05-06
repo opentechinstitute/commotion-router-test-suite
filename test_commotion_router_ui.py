@@ -1,3 +1,9 @@
+# To do:
+# Write Commotion-Router UI map for Selenium
+# Write input fuzzers
+# Write admin module
+# Write logging functions
+
 import unittest
 import netifaces as ni
 import sys
@@ -12,6 +18,7 @@ from selenium.webdriver.common.by import By
 logging.basicConfig(filename='logs/test_commotion_router_ui.log',
                     level=logging.INFO)
 logging.warning("Specify path to log directory")
+logging.warning("This test suite needs a UI map!")
 
 def error(message):
     logging.error(message)
@@ -66,7 +73,8 @@ class TestCRUserFunctions(crInputTestCase):
     def setUp(self):
         """Set up browser"""
         self.driver = self.loadBrowser("firefox", "default")
-        
+    
+    @unittest.skipIf(1 == 1, "Skip if wlan0 provides commotion ip and eth0 is in use")
     def test_thisnode(self):
         """Test thisnode dns resolution"""
         # SKIP THIS TEST if wlan0 provides commotion ip and eth0 is in use
@@ -110,10 +118,41 @@ class TestCRAdminFunctions(crInputTestCase):
         WebDriverWait(d, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
         pw_field = d.find_element_by_id("focus_password")
+        pw_field.send_keys("BADPASS\n")
+        WebDriverWait(d, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "error")))
+        self.assertTrue(d.find_element_by_class_name("error"))
+
+    def test_fuzz_admin_password_field(self):
+        # This should eventually replace test_log_in_fail
+        d = self.driver
+        url = 'https://' + self.commotion_node_ip + '/cgi-bin/luci/admin'
+        d.get(url)
+        WebDriverWait(d, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
+        # fuzz = gen_fuzz(params)
+        # for garbage in fuzz:
+        #       pw_field = d.find_element_by_id("focus_password")
+        #       pw_field.send_keys(garbage)
+        #       WebDriverWait(d, 10).until(
+        #           EC.presence_of_element_located((By.CLASS_NAME, "error")))
+        #       seleniumVerifyTrue(d.find_element_by_class_name("error"))
+        # assertTrue(noSeleniumVerifyFailures)
+
+
+    def test_log_in_pass(self):
+        d = self.driver
+        url = 'https://' + self.commotion_node_ip + '/cgi-bin/luci/admin'
+        d.get(url)
+        WebDriverWait(d, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
+        d.find_element_by_id("focus_password").send_keys('0t1t3stn3t')
         # Should actually check for div.error
-        self.assertFalse(pw_field.send_keys('BADPASS'))
-        
-        
+        WebDriverWait(d, 10).until(
+            EC.presence_of_element_located((By.ID, "xhr_poll_status")))
+        self.assertTrue(d.find_element_by_id("xhr_poll_status"))
+    
+
     def tearDown(self):
         self.driver.quit()
         logging.info("Browser instance destroyed")
