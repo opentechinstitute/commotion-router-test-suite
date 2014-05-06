@@ -69,6 +69,7 @@ class TestCRUserFunctions(crInputTestCase):
         
     def test_thisnode(self):
         """Test thisnode dns resolution"""
+        # SKIP THIS TEST if wlan0 provides commotion ip and eth0 is in use
         d = self.driver
         d.get('https://thisnode')
         WebDriverWait(d, 10).until(
@@ -101,6 +102,17 @@ class TestCRAdminFunctions(crInputTestCase):
         WebDriverWait(d, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
         self.assertTrue(d.find_element_by_class_name("cbi-input-user"))
+    
+    def test_log_in_fail(self):
+        d = self.driver
+        url = 'https://' + self.commotion_node_ip + '/cgi-bin/luci/admin'
+        d.get(url)
+        WebDriverWait(d, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
+        pw_field = d.find_element_by_id("focus_password")
+        # Should actually check for div.error
+        self.assertFalse(pw_field.send_keys('BADPASS'))
+        
         
     def tearDown(self):
         self.driver.quit()
@@ -115,7 +127,8 @@ if __name__ == "__main__":
         test_suite.addTest(unittest.makeSuite(TestCRUserFunctions))
         test_suite.addTest(unittest.makeSuite(TestCRAdminFunctions))
         return test_suite
-    
+    # Fix logging
+    # https://stackoverflow.com/questions/3347019/how-can-one-use-the-logging-module-in-python-with-the-unittest-module
     browser_suite = suite()
     runner = unittest.TextTestRunner()
     runner.run(browser_suite)
