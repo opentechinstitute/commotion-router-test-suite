@@ -50,50 +50,62 @@ class crInputTestCase(unittest.TestCase):
         cls.ff_admin = webdriver.FirefoxProfile()
         cls.ff_admin.accept_untrusted_certs = True
 
-        cls.profiles = {"default":browser+"profile=None", "firefox_admin": cls.ff_admin}
-        cls.browsers = {"firefox":"webdriver.Firefox("+cls.profiles[profile]+")", "chrome":"webdriver.Chrome("+cls.profiles[profile]+")"}
-
-        print "Returning " + cls.browsers[browser]
+        cls.profiles = {"default":None, "firefox_admin": cls.ff_admin}
+        cls.browsers = {"firefox":webdriver.Firefox(cls.profiles[profile])}
 
         return cls.browsers[browser]
-
+    
     @classmethod
     def tearDownClass(cls):
-        """Forget everything about the browser"""
-        cls.driver.quit()
-        logging.info('Browser instance destroyed')
-        print "Teardown complete"
+        cls.commotion_client_ip = 0
+        cls.profiles = []
+        cls.browsers = []
+        logging.info("crInputTestCase destroyed")
         
 class TestCRUserFunctions(crInputTestCase):
     def setUp(self):
         """Set up browser"""
-        print self.commotion_node_ip
         self.driver = self.loadBrowser("firefox", "default")
         
     def test_thisnode(self):
         """Test thisnode dns resolution"""
         d = self.driver
         d.get('https://thisnode')
-        assert d.title
+        WebDriverWait(d, 10).until(
+            EC.presence_of_element_located((By.ID, "device")))
+        self.assertTrue(d.find_element_by_id("device"))
+        #assertIsNotNone(element)
         
     def test_ip_address(self):
         """Test ip-only connection"""
         d = self.driver
-        d.get(commotion_node_ip)
-        assert d.title
+        d.get('https://' + self.commotion_node_ip)
+        WebDriverWait(d, 10).until(
+            EC.presence_of_element_located((By.ID, "device")))
+        self.assertTrue(d.find_element_by_id("device"))
         
-    def test_require_admin_password(self):
-        """Make sure a password is required for admin pages"""
-        d = self.driver
-        d.get(d.thisnode + '/cgi-bin/luci/admin')
-        assert d.MEAT
+    def tearDown(self):
+        self.driver.quit()
+        logging.info("Browser instance destroyed")
     
 class TestCRAdminFunctions(crInputTestCase):
     def setUp(self):
         """Set up browser to allow access to admin functions"""
-        print self.commotion_node_ip
         self.driver = self.loadBrowser("firefox", "firefox_admin")        
 
+    def test_require_admin_password(self):
+        """Make sure a password is required for admin pages. Use admin profile to avoid DOM-less self-signed cert error."""
+        d = self.driver
+        url = 'https://' + self.commotion_node_ip + '/cgi-bin/luci/admin'
+        d.get(url)
+        WebDriverWait(d, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
+        self.assertTrue(d.find_element_by_class_name("cbi-input-user"))
+        
+    def tearDown(self):
+        self.driver.quit()
+        logging.info("Browser instance destroyed")
+        
 if __name__ == "__main__":
     # This is probably wrong
     def suite():
