@@ -1,5 +1,6 @@
 # To do:
 # Write Commotion-Router UI map for Selenium
+# (See also Page Object Design Pattern)
 # Write input fuzzers
 # Write admin module
 # Write logging functions
@@ -43,7 +44,7 @@ class crInputTestCase(unittest.TestCase):
                         print iface + " not valid"
                 except KeyError:
                     print iface + " has been disconnected"
-                    pass
+                    continue
 
         if cls.commotion_client_ip == 0:
             error("No valid Commotion IP address found")
