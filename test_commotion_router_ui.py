@@ -147,7 +147,7 @@ class TestCRAdminFunctions(crInputTestCase):
         d.get(url)
         WebDriverWait(d, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
-        d.find_element_by_id("focus_password").send_keys('0t1t3stn3t')
+        d.find_element_by_id("focus_password").send_keys('asdf')
         # Should actually check for div.error
         WebDriverWait(d, 10).until(
             EC.presence_of_element_located((By.ID, "xhr_poll_status")))
