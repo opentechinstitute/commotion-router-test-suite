@@ -7,7 +7,7 @@
 
 import unittest
 import commotiontestobjects.commotionrouterobjects.routerobjects as cro
-import sys
+from commotiontestobjects.util import error
 import logging
 import re
 from selenium import webdriver
@@ -21,11 +21,6 @@ logging.basicConfig(filename='logs/test_commotion_router_ui.log',
 logging.warning("Specify path to log directory")
 logging.warning("This test suite needs a UI map!")
 
-def error(message):
-    logging.error(message)
-    sys.stderr.write("ERROR: %s\n" % message)
-    sys.exit(1)
-    
 class crInputTestCase(unittest.TestCase):
     """Setting defaults for live commotion router testing"""
     

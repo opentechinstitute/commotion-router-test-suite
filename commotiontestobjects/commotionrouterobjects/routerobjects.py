@@ -1,13 +1,8 @@
-import sys
+from commotiontestobjects.util import error
 import bunch
 import netifaces as ni
 import re
 
-def error(message):
-    #logging.error(message)
-    sys.stderr.write("ERROR: %s\n" % message)
-    sys.exit(1)
-    
 def getNetInfo(object):
     """Create object-like dict for netinfo"""
     if hasattr(object, 'interfaces') is False:
