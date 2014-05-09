@@ -6,7 +6,6 @@
 # Write logging functions
 
 import unittest
-#import netifaces as ni
 import commotiontestobjects.commotionrouterobjects.routerobjects as cro
 import sys
 import logging
