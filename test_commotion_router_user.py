@@ -2,16 +2,13 @@
 # Write Commotion-Router UI map for Selenium
 # (See also Page Object Design Pattern)
 # Write input fuzzers
-# Write admin module
 # Write logging functions
 
 import unittest
 import commotiontestobjects.commotionrouterobjects.routerobjects as cro
 from commotiontestobjects.util import error
+import commotiontestobjects.browserobjects as sel
 import logging
-import re
-from selenium import webdriver
-from selenium.webdriver.firefox import firefox_profile
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -23,35 +20,33 @@ logging.warning("This test suite needs a UI map!")
 
 class crInputTestCase(unittest.TestCase):
     """Setting defaults for live commotion router testing"""
+    browser = "firefox"
+    profile = "default"
     
     @classmethod
     def setUpClass(cls):
+        """Get information about net interfaces and target commotion node"""
         cls.netinfo = {}
         cls.netinfo = cro.getNetInfo(cls.netinfo)
 
     @classmethod
     def loadBrowser(cls, browser, profile):
-        # Move profiles to subclasses
-        cls.ff_admin = webdriver.FirefoxProfile()
-        cls.ff_admin.accept_untrusted_certs = True
+        """Pass request to browser generation function with desired browser and profile type"""
+        Browser = sel.requestBrowser(browser, profile)
+        return Browser
 
-        cls.profiles = {"default":None, "firefox_admin": cls.ff_admin}
-        cls.browsers = {"firefox":webdriver.Firefox(cls.profiles[profile])}
-
-        return cls.browsers[browser]
-    
     @classmethod
     def tearDownClass(cls):
         cls.netinfo = {}
-        cls.profiles = []
-        cls.browsers = []
+        cls.profile = None
+        cls.browser = None
         logging.info("crInputTestCase destroyed")
-        
+
 class TestCRUserFunctions(crInputTestCase):
     def setUp(self):
         """Set up browser"""
-        self.driver = self.loadBrowser("firefox", "default")
-    
+        self.driver = self.loadBrowser(self.browser, self.profile)
+        
     @unittest.skipIf(1 == 1, "Skip if wlan0 provides commotion ip and eth0 is in use")
     def test_thisnode(self):
         """Test thisnode dns resolution"""
@@ -76,9 +71,13 @@ class TestCRUserFunctions(crInputTestCase):
         logging.info("Browser instance destroyed")
     
 class TestCRAdminFunctions(crInputTestCase):
+    """Test admin functions. Note browser profile change"""
+    
+    profile = "firefox_admin"
+    
     def setUp(self):
         """Set up browser to allow access to admin functions"""
-        self.driver = self.loadBrowser("firefox", "firefox_admin")        
+        self.driver = self.loadBrowser(self.browser, self.profile)
 
     def test_require_admin_password(self):
         """Make sure a password is required for admin pages. Use admin profile to avoid DOM-less self-signed cert error."""
@@ -117,7 +116,6 @@ class TestCRAdminFunctions(crInputTestCase):
         #       seleniumVerifyTrue(d.find_element_by_class_name("error"))
         # assertTrue(noSeleniumVerifyFailures)
 
-
     def test_log_in_pass(self):
         d = self.driver
         url = 'https://' + self.netinfo.commotion_node_ip + '/cgi-bin/luci/admin'
@@ -130,7 +128,6 @@ class TestCRAdminFunctions(crInputTestCase):
             EC.presence_of_element_located((By.ID, "xhr_poll_status")))
         self.assertTrue(d.find_element_by_id("xhr_poll_status"))
     
-
     def tearDown(self):
         self.driver.quit()
         logging.info("Browser instance destroyed")
