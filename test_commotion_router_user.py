@@ -32,8 +32,8 @@ class crInputTestCase(unittest.TestCase):
     
     @classmethod
     def setUpClass(cls):
-        cls.commotion_client_ip = 0
-        cls.commotion_client_ip, cls.commotion_node_ip = cro.getThisnodeIP(cls.commotion_client_ip)
+        cls.netinfo = {}
+        cls.netinfo = cro.getNetInfo(cls.netinfo)
 
     @classmethod
     def loadBrowser(cls, browser, profile):
@@ -52,6 +52,15 @@ class crInputTestCase(unittest.TestCase):
         cls.profiles = []
         cls.browsers = []
         logging.info("crInputTestCase destroyed")
+
+#class TestOffline(crInputTestCase):
+    #"""Offline mode for development use only"""
+    #def setUp(self):
+        #self.commotion_client_ip = '127.0.0.1'
+
+    #def tearDown(self):
+        #self.driver.quit()
+        #logging.info("Browser instance destroyed")
         
 class TestCRUserFunctions(crInputTestCase):
     def setUp(self):
