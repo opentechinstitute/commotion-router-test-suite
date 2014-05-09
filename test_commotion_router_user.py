@@ -47,19 +47,10 @@ class crInputTestCase(unittest.TestCase):
     
     @classmethod
     def tearDownClass(cls):
-        cls.commotion_client_ip = 0
+        cls.netinfo = {}
         cls.profiles = []
         cls.browsers = []
         logging.info("crInputTestCase destroyed")
-
-#class TestOffline(crInputTestCase):
-    #"""Offline mode for development use only"""
-    #def setUp(self):
-        #self.commotion_client_ip = '127.0.0.1'
-
-    #def tearDown(self):
-        #self.driver.quit()
-        #logging.info("Browser instance destroyed")
         
 class TestCRUserFunctions(crInputTestCase):
     def setUp(self):
