@@ -71,7 +71,7 @@ class TestCRUserFunctions(crInputTestCase):
     def test_ip_address(self):
         """Test ip-only connection"""
         d = self.driver
-        d.get('https://' + self.commotion_node_ip)
+        d.get('https://' + self.netinfo.commotion_node_ip)
         WebDriverWait(d, 10).until(
             EC.presence_of_element_located((By.ID, "device")))
         self.assertTrue(d.find_element_by_id("device"))
@@ -88,7 +88,7 @@ class TestCRAdminFunctions(crInputTestCase):
     def test_require_admin_password(self):
         """Make sure a password is required for admin pages. Use admin profile to avoid DOM-less self-signed cert error."""
         d = self.driver
-        url = 'https://' + self.commotion_node_ip + '/cgi-bin/luci/admin'
+        url = 'https://' + self.netinfo.commotion_node_ip + '/cgi-bin/luci/admin'
         d.get(url)
         WebDriverWait(d, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
@@ -96,7 +96,7 @@ class TestCRAdminFunctions(crInputTestCase):
     
     def test_log_in_fail(self):
         d = self.driver
-        url = 'https://' + self.commotion_node_ip + '/cgi-bin/luci/admin'
+        url = 'https://' + self.netinfo.commotion_node_ip + '/cgi-bin/luci/admin'
         d.get(url)
         WebDriverWait(d, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
@@ -109,7 +109,7 @@ class TestCRAdminFunctions(crInputTestCase):
     def test_fuzz_admin_password_field(self):
         # This should eventually replace test_log_in_fail
         d = self.driver
-        url = 'https://' + self.commotion_node_ip + '/cgi-bin/luci/admin'
+        url = 'https://' + self.netinfo.commotion_node_ip + '/cgi-bin/luci/admin'
         d.get(url)
         WebDriverWait(d, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
@@ -125,7 +125,7 @@ class TestCRAdminFunctions(crInputTestCase):
 
     def test_log_in_pass(self):
         d = self.driver
-        url = 'https://' + self.commotion_node_ip + '/cgi-bin/luci/admin'
+        url = 'https://' + self.netinfo.commotion_node_ip + '/cgi-bin/luci/admin'
         d.get(url)
         WebDriverWait(d, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
