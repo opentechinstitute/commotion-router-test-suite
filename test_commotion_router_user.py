@@ -14,9 +14,7 @@
 # Write logging functions
 
 import unittest
-import commotiontestobjects.commotionrouterobjects.routerobjects as cro
-#from commotiontestobjects.util import error
-import commotiontestobjects.browserobjects as sel
+import commotiontestobjects.browserobjects as cbo
 import logging
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -28,56 +26,8 @@ logging.warning("Specify path to log directory")
 logging.warning("This test suite needs a UI map!")
 
 
-class CRInputTestCase(unittest.TestCase):
-    """Setting defaults for live commotion router testing"""
-    browser = "firefox"
-    profile = "default"
-
-    @classmethod
-    def setUpClass(cls):
-        """Get information about net interfaces and target commotion node"""
-        cls.netinfo = {}
-        cls.netinfo = cro.get_net_info(cls.netinfo)
-
-    @classmethod
-    def load_browser(cls, browser, profile):
-        """
-        Pass request to browser generation function with desired browser
-        and profile type
-        """
-        browser = sel.request_browser(browser, profile)
-        return browser
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.netinfo = {}
-        cls.profile = None
-        cls.browser = None
-        logging.info("CRInputTestCase destroyed")
-
-    def setUp(self):
-        """Set up browser"""
-        self.browser = self.load_browser(self.browser, self.profile)
-
-    def tearDown(self):
-        """Clean up test instance"""
-        self.browser.quit()
-        logging.info("Browser instance destroyed")
-
-
-class TestCRUserFunctions(CRInputTestCase):
+class TestCRUserFunctions(cbo.CRBrowserTestContext):
     """Unittest child class for unprivileged functions"""
-
-    @unittest.skipIf(1 == 1,
-                     "Skip if wlan0 provides commotion ip and eth0 is in use")
-    def test_thisnode(self):
-        """Test thisnode dns resolution"""
-        # SKIP THIS TEST if wlan0 provides commotion ip and eth0 is in use
-        __sb = self.browser
-        __sb.get('https://thisnode')
-        WebDriverWait(__sb, 10).until(
-            EC.presence_of_element_located((By.ID, "device")))
-        self.assertTrue(__sb.find_element_by_id("device"))
 
     def test_ip_address(self):
         """Test ip-only connection"""
@@ -88,7 +38,7 @@ class TestCRUserFunctions(CRInputTestCase):
         self.assertTrue(__sb.find_element_by_id("device"))
 
 
-class TestCRAdminFunctions(CRInputTestCase):
+class TestCRAdminFunctions(cbo.CRBrowserTestContext):
     """Test admin functions. Note browser profile change"""
 
     profile = "firefox_admin"
@@ -158,7 +108,7 @@ if __name__ == "__main__":
     def suite():
         """Gather all tests from this module into a test suite."""
         test_suite = unittest.TestSuite()
-        test_suite.addTest(unittest.makeSuite(CRInputTestCase))
+        test_suite.addTest(unittest.makeSuite(cbo.CRBrowserTestContext))
         test_suite.addTest(unittest.makeSuite(TestCRUserFunctions))
         test_suite.addTest(unittest.makeSuite(TestCRAdminFunctions))
         return test_suite
