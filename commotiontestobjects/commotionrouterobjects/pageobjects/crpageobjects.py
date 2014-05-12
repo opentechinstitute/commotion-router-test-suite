@@ -6,16 +6,17 @@ import commotiontestobjects.browserobjects
 
 class CRCommonPageObjects(object):
     """Page objects common to all Commotion Router pages"""
-    
+
+    # page_url will be set by individual pages
+    # Could prepopulate with thisnode or commotion_node_ip
+    # but these won't actually match when rendered
+    page_url = None
+
     # Example
     # From http://justinlilly.com/python/selenium-page-object-pattern-\
     #    -the-key-to-maintainable-tests.html
     # These are currently handled in tests and browserobjects
-    #url = None
-
-    #def __init__(self, driver):
-        #self.driver = driver
-
+    #
     #def fill_form_by_css(self, form_css, value):
         #elem = self.driver.find(form_css)
         #elem.send_keys(value)
@@ -31,13 +32,19 @@ class CRCommonPageObjects(object):
     # Header
     # Footer
     # Body
-    pass
 
+
+class CRHomePageObjects(CRCommonPageObjects):
+    """Objects found on Commotion Router's default landing page"""
+    
+    page_url = driver.netinfo.commotion_node_ip + '/cgi-bin/luci'
+    
 
 class CRLoginPageObjects(CRCommonPageObjects):
     """Page objects specific to Commotion Router login page.
         Note that the login page triggers a DOM-less cert error
     """
+    page_url = driver.netinfo.commotion_node_ip + '/cgi-bin/luci'
     # Username
     # Password
     # Submit

@@ -20,11 +20,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
-logging.basicConfig(filename='logs/test_commotion_router_ui.log',
-                    level=logging.INFO)
-logging.warning("Specify path to log directory")
-logging.warning("This test suite needs a UI map!")
-
 
 class TestCRUserFunctions(cbo.CRBrowserTestContext):
     """Unittest child class for unprivileged functions"""
@@ -32,7 +27,19 @@ class TestCRUserFunctions(cbo.CRBrowserTestContext):
     def test_ip_address(self):
         """Test ip-only connection"""
         __sb = self.browser
+        
         __sb.get('https://' + self.netinfo.commotion_node_ip)
+        WebDriverWait(__sb, 10).until(
+            EC.presence_of_element_located((By.ID, "device")))
+        self.assertTrue(__sb.find_element_by_id("device"))
+
+    @unittest.skipIf(1 == 1,
+                     "Skip if wlan0 provides commotion ip and eth0 is in use")
+    def test_thisnode(self):
+        """Test thisnode dns resolution"""
+        # SKIP THIS TEST if wlan0 provides commotion ip and eth0 is in use
+        __sb = self.browser
+        __sb.get('https://thisnode')
         WebDriverWait(__sb, 10).until(
             EC.presence_of_element_located((By.ID, "device")))
         self.assertTrue(__sb.find_element_by_id("device"))

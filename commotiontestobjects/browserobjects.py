@@ -40,6 +40,9 @@ class CRBrowserTestContext(unittest.TestCase):
     def setUp(self):
         """Set up browser"""
         self.browser = self.load_browser(self.browser, self.profile)
+        
+        # Uncomment when browser.test_url has been added to page objects
+        #self.browser.get(self.browser.test_url)
 
     def tearDown(self):
         """Clean up test instance"""
