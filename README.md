@@ -10,6 +10,18 @@ Originally designed to minimize manual input testing on router UI.  Many tests,
 particularly tests of unprivileged functions, use Selenium where it is very
 inefficient to do so, but are included as simple examples of test structure.
 
+Basic Structure
+_______________
+
+Tests
+
++ commotiontestobjects/ - Objects representing the user
+++ browserobjects
+++ util
+++ commotionrouterobjects/ - Objects representing router nodes
++++ routerobjects - router-specific node objects
++++ pageobjects/ - Objects found only in router-based UI pages
+++++ crpageobjects - Functions to build UI page models from component elements
 
 Resources
 _________
