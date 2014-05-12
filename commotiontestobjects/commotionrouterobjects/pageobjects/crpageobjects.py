@@ -3,6 +3,8 @@
 """
 
 import commotiontestobjects.browserobjects
+import commotiontestobjects.commotionrouterobjects.routerobjects as cro
+
 
 class CRCommonPageObjects(object):
     """Page objects common to all Commotion Router pages"""
@@ -11,6 +13,13 @@ class CRCommonPageObjects(object):
     # Could prepopulate with thisnode or commotion_node_ip
     # but these won't actually match when rendered
     page_url = None
+    netinfo = None
+    browser = None
+
+    def __init__(self, browser):
+        """Set page within context of router. Import browser"""
+        self.netinfo = cro.get_net_info(self)
+        __sb = browser
 
     # Example
     # From http://justinlilly.com/python/selenium-page-object-pattern-\
@@ -36,15 +45,15 @@ class CRCommonPageObjects(object):
 
 class CRHomePageObjects(CRCommonPageObjects):
     """Objects found on Commotion Router's default landing page"""
-    
-    page_url = driver.netinfo.commotion_node_ip + '/cgi-bin/luci'
-    
+    pass
+#    page_url = netinfo.commotion_node_ip + '/cgi-bin/luci'
+
 
 class CRLoginPageObjects(CRCommonPageObjects):
     """Page objects specific to Commotion Router login page.
         Note that the login page triggers a DOM-less cert error
     """
-    page_url = driver.netinfo.commotion_node_ip + '/cgi-bin/luci'
+#    page_url = netinfo.commotion_node_ip + '/cgi-bin/luci'
     # Username
     # Password
     # Submit

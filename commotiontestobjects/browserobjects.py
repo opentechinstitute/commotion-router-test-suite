@@ -15,11 +15,13 @@ class CRBrowserTestContext(unittest.TestCase):
     logging.warning("Specify path to log directory")
     logging.warning("This test suite needs a UI map!")
 
-    @classmethod
-    def setUpClass(cls):
-        """Get information about net interfaces and target commotion node"""
-        cls.netinfo = {}
-        cls.netinfo = cro.get_net_info(cls.netinfo)
+    #@classmethod
+    #def setUpClass(cls):
+        #"""Get information about net interfaces and target commotion node
+            #This may need to move to pageobjects __init__
+        #"""
+        #cls.netinfo = {}
+        #cls.netinfo = cro.get_net_info(cls.netinfo)
 
     @classmethod
     def load_browser(cls, browser, profile):
@@ -32,8 +34,8 @@ class CRBrowserTestContext(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.netinfo = {}
-        cls.profile = None
+        #cls.netinfo = {}
+        #cls.profile = None
         cls.browser = None
         logging.info("CRBrowserTestContext destroyed")
 
