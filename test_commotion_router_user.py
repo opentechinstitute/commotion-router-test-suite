@@ -55,12 +55,18 @@ class CRInputTestCase(unittest.TestCase):
         cls.browser = None
         logging.info("CRInputTestCase destroyed")
 
-
-class TestCRUserFunctions(CRInputTestCase):
-    """Unittest child class for unprivileged functions"""
     def setUp(self):
         """Set up browser"""
         self.browser = self.load_browser(self.browser, self.profile)
+
+    def tearDown(self):
+        """Clean up test instance"""
+        self.browser.quit()
+        logging.info("Browser instance destroyed")
+
+
+class TestCRUserFunctions(CRInputTestCase):
+    """Unittest child class for unprivileged functions"""
 
     @unittest.skipIf(1 == 1,
                      "Skip if wlan0 provides commotion ip and eth0 is in use")
@@ -81,19 +87,11 @@ class TestCRUserFunctions(CRInputTestCase):
             EC.presence_of_element_located((By.ID, "device")))
         self.assertTrue(__sb.find_element_by_id("device"))
 
-    def tearDown(self):
-        self.browser.quit()
-        logging.info("Browser instance destroyed")
-
 
 class TestCRAdminFunctions(CRInputTestCase):
     """Test admin functions. Note browser profile change"""
 
     profile = "firefox_admin"
-
-    def setUp(self):
-        """Set up browser to allow access to admin functions"""
-        self.browser = self.load_browser(self.browser, self.profile)
 
     def test_require_admin_password(self):
         """
@@ -154,10 +152,6 @@ class TestCRAdminFunctions(CRInputTestCase):
             EC.presence_of_element_located((By.ID, "xhr_poll_status")))
         self.assertTrue(__sb.find_element_by_id("xhr_poll_status"))
 
-    def tearDown(self):
-        """Clean up test instance"""
-        self.browser.quit()
-        logging.info("Browser instance destroyed")
 
 if __name__ == "__main__":
     # This is probably wrong
