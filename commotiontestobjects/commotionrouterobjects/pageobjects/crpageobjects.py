@@ -9,17 +9,17 @@ import commotiontestobjects.commotionrouterobjects.routerobjects as cro
 class CRCommonPageObjects(object):
     """Page objects common to all Commotion Router pages"""
 
-    # page_url will be set by individual pages
-    # Could prepopulate with thisnode or commotion_node_ip
-    # but these won't actually match when rendered
-    page_url = None
-    netinfo = None
-    browser = None
-
     def __init__(self, browser):
         """Set page within context of router. Import browser"""
-        self.netinfo = cro.get_net_info(self)
+        page_url = None
         __sb = browser
+        self.commotion_node_ip = cro.get_commotion_node_ip(commotion_client_ip)
+        print self.commotion_node_ip
+
+        # page_url will be set by individual pages
+        # Could prepopulate with thisnode or commotion_node_ip
+        # but these won't actually match when rendered
+
 
     # Example
     # From http://justinlilly.com/python/selenium-page-object-pattern-\
@@ -53,16 +53,22 @@ class CRLoginPageObjects(CRCommonPageObjects):
     """Page objects specific to Commotion Router login page.
         Note that the login page triggers a DOM-less cert error
     """
-#    page_url = netinfo.commotion_node_ip + '/cgi-bin/luci'
+
+    def __init__(self, browser):
+        super(CRCommonPageObjects, self).__init__()
+
+    #page_url = 'https://' + self.commotion_node_ip \
+        #+ '/cgi-bin/luci/admin/commotion'
     # Username
     # Password
     # Submit
     # Reset
-    pass
 
 
 class CRAdminPageObjects(CRCommonPageObjects):
     """Page objects accessible only to authenticated admin users"""
     # Side Nav
     # URL stok (Note: This also allows csrf vuln)
+    #page_url = 'https://' + self.netinfo.commotion_node_ip \
+            #+ '/cgi-bin/luci/admin'
     pass

@@ -4,36 +4,75 @@ import bunch
 import netifaces as ni
 import re
 
+# To do: 
+# 1. (This doesn't actually need to be a class)
+# 2. separate get_net_info into component methods 
+
+
+#class CommotionNetworkComponent(object):
+    #"""Create object-like dict for netinfo
+        #Client needs interfaces, node_ip, and client_ip.
+        #Node needs only node_ip"""
+    #netinfo = None;
+
+    #def __init__:
+        #netinfo = create_net_info()
+
+    #def create_net_info():
+        #get_interfaces()
+        #get_commotion_client_ip()
+        #get_commotion_node_ip()
+
+        #return netinfo
+
+    #setattr(object, netinfo)
+
+    #return object
 
 def get_net_info(object):
     """Create object-like dict for netinfo"""
-    if hasattr(object, 'interfaces') is False:
-        object = bunch.Bunch(interfaces=ni.interfaces())
+    object = bunch.Bunch()
 
-    if hasattr(object, "commotion_client_ip") is False:
-        for iface in object.interfaces:
-            try:
-                if ni.ifaddresses(iface)[2][0]['addr'].startswith('10.'):
-                    print iface + " has a valid Commotion IP address: " \
-                        + ni.ifaddresses(iface)[2][0]['addr']
-                    object = bunch.Bunch(commotion_client_ip=
-                                         ni.ifaddresses(iface)[2][0]['addr'])
-                else:
-                    object.interfaces = bunch.Bunch(iface=False)
-                    print iface + " not valid"
-            except KeyError:
-                object.interfaces = bunch.Bunch(iface=True)
-                print iface + " has been disconnected"
-                continue
+    interfaces, commotion_client_ip = get_commotion_client_ip(ni.interfaces())
 
-    if getattr(object, "commotion_client_ip") is False:
-        # this should raise an exception instead
+    print "Commotion Client IP is", commotion_client_ip
+
+    if commotion_client_ip is None:
         error("No valid Commotion IP address found")
         raise "No valid Commotion IP address found"
     else:
-        # Use client IP address to determine node's public IP
-        object = bunch.Bunch(commotion_node_ip=
-                             re.sub(r"(\d+)$", '1',
-                                    object.commotion_client_ip))
+        commotion_node_ip = get_commotion_node_ip(commotion_client_ip)
+
+    object.update(interfaces)
+    object.update({'commotion_client_ip': commotion_client_ip})
+    object.update({'commotion_node_ip': commotion_node_ip})
 
     return object
+
+
+def get_commotion_client_ip(interfaces):
+    """Check interfaces for a valid commotion client IP address"""
+    commotion_interfaces = {}
+
+    for iface in interfaces:
+        try:
+            if ni.ifaddresses(iface)[2][0]['addr'].startswith('10.'):
+                print iface + " has a valid Commotion IP address: " \
+                    + ni.ifaddresses(iface)[2][0]['addr']
+                commotion_client_ip = ni.ifaddresses(iface)[2][0]['addr']
+            else:
+                commotion_interfaces[iface] = False
+                print iface + " not valid"
+        except KeyError:
+            commotion_interfaces[iface] = True
+            print iface + " has been disconnected"
+            continue
+
+    return commotion_interfaces, commotion_client_ip
+
+
+def get_commotion_node_ip(commotion_client_ip):
+    """Use commotion_client_ip to generate guess commotion node IP"""
+    commotion_node_ip = re.sub(r"(\d+)$", '1', commotion_client_ip)
+    print "node_ip function is returning", commotion_node_ip
+    return commotion_node_ip
