@@ -33,7 +33,7 @@ def get_net_info(object):
     """Create object-like dict for netinfo"""
     object = bunch.Bunch()
 
-    interfaces, commotion_client_ip = get_commotion_client_ip(ni.interfaces())
+    interfaces, commotion_client_ip = get_commotion_client_ip()
 
     print "Commotion Client IP is", commotion_client_ip
 
@@ -50,10 +50,12 @@ def get_net_info(object):
     return object
 
 
-def get_commotion_client_ip(interfaces):
+def get_commotion_client_ip():
     """Check interfaces for a valid commotion client IP address"""
+    # Will interface impact commotion tests
     commotion_interfaces = {}
-
+    # Raw list of interfaces
+    interfaces = ni.interfaces()
     for iface in interfaces:
         try:
             if ni.ifaddresses(iface)[2][0]['addr'].startswith('10.'):
@@ -68,11 +70,13 @@ def get_commotion_client_ip(interfaces):
             print iface + " has been disconnected"
             continue
 
+    # This should only return one thing. Move interfaces somewhere else!
     return commotion_interfaces, commotion_client_ip
 
 
 def get_commotion_node_ip(commotion_client_ip):
     """Use commotion_client_ip to generate guess commotion node IP"""
+    print "Generating node ip from", commotion_client_ip
     commotion_node_ip = re.sub(r"(\d+)$", '1', commotion_client_ip)
     print "node_ip function is returning", commotion_node_ip
     return commotion_node_ip

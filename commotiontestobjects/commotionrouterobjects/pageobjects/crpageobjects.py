@@ -4,21 +4,26 @@
 
 import commotiontestobjects.browserobjects
 import commotiontestobjects.commotionrouterobjects.routerobjects as cro
+import netifaces as ni
 
 
 class CRCommonPageObjects(object):
     """Page objects common to all Commotion Router pages"""
 
-    def __init__(self, browser):
-        """Set page within context of router. Import browser"""
+    def __init__(self):
+        """Set page within context of router."""
         page_url = None
-        __sb = browser
-        self.commotion_node_ip = cro.get_commotion_node_ip(commotion_client_ip)
-        print self.commotion_node_ip
+        __sb = None
+        commotion_node_ip = None
 
-        # page_url will be set by individual pages
-        # Could prepopulate with thisnode or commotion_node_ip
-        # but these won't actually match when rendered
+
+    # This is dumb and duplicative
+    _, commotion_client_ip = cro.get_commotion_client_ip()
+    commotion_node_ip = cro.get_commotion_node_ip(commotion_client_ip)
+
+    # page_url will be set by individual pages
+    # Could prepopulate with thisnode or commotion_node_ip
+    # but these won't actually match when rendered
 
 
     # Example
@@ -56,9 +61,10 @@ class CRLoginPageObjects(CRCommonPageObjects):
 
     def __init__(self, browser):
         super(CRCommonPageObjects, self).__init__()
+        __sb = browser
 
-    #page_url = 'https://' + self.commotion_node_ip \
-        #+ '/cgi-bin/luci/admin/commotion'
+    page_url = 'https://' + CRCommonPageObjects.commotion_node_ip \
+        + '/cgi-bin/luci/admin'
     # Username
     # Password
     # Submit
