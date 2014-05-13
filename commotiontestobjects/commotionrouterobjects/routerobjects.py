@@ -70,6 +70,12 @@ def get_commotion_client_ip():
             print iface + " has been disconnected"
             continue
 
+    try:
+        commotion_client_ip
+    except:
+        message = "No valid commotion interfaces found"
+        error(message)
+
     # This should only return one thing. Move interfaces somewhere else!
     return commotion_interfaces, commotion_client_ip
 
