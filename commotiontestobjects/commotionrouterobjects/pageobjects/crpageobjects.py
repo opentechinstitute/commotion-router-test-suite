@@ -17,13 +17,16 @@ class CRCommonPageObjects(object):
         commotion_node_ip = None
 
 
-    # This is dumb and duplicative
-    _, commotion_client_ip = cro.get_commotion_client_ip()
+    # This is dumb and duplicative. We only need node_ip.
+    __, commotion_client_ip = cro.get_commotion_client_ip()
     commotion_node_ip = cro.get_commotion_node_ip(commotion_client_ip)
 
-    # page_url will be set by individual pages
-    # Could prepopulate with thisnode or commotion_node_ip
-    # but these won't actually match when rendered
+    def _verify_correct_page(self, __sb, page_url):
+        __sb.get(page_url)
+        assert(__sb.current_url == page_url)
+
+    def wait_for(self, __sb, locator):
+        pass
 
 
     # Example
@@ -62,9 +65,10 @@ class CRLoginPageObjects(CRCommonPageObjects):
     def __init__(self, browser):
         super(CRCommonPageObjects, self).__init__()
         __sb = browser
+        self.page_url = 'https://' + CRCommonPageObjects.commotion_node_ip \
+            + '/cgi-bin/luci/admin'
 
-    page_url = 'https://' + CRCommonPageObjects.commotion_node_ip \
-        + '/cgi-bin/luci/admin'
+        self._verify_correct_page(__sb, self.page_url)
     # Username
     # Password
     # Submit
