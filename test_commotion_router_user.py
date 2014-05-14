@@ -1,4 +1,5 @@
 """Sample automated test suite for commotion router's unprivileged functions.
+    Partially broken.
     Most of these are an inefficient use of selenium, 
     but are included as examples.
 """

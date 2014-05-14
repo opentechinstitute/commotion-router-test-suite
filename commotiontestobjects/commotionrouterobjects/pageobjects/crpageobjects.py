@@ -125,8 +125,8 @@ class CRLoginPageObjects(CRCommonPageObjects):
             print "Login page requires a password"
             return True
 
-
-
+    def incorrect_pass_returns_error(self, __sb, password):
+        return False
 
 
 class CRAdminPageObjects(CRCommonPageObjects):

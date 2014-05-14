@@ -5,20 +5,34 @@
 
 import unittest
 import commotiontestobjects.browserobjects as cbo
-import commotiontestobjects.commotionrouterobjects.pageobjects.crpageobjects as cpo
+import commotiontestobjects.commotionrouterobjects.pageobjects.crpageobjects \
+    as cpo
 
 
-class TestMini(cbo.CRBrowserTestContext):
-    """just a proof of concept"""
+class TestFirefoxAdmin(cbo.CRBrowserTestContext):
+    """Tests of privileged Commotion Router web functions"""
+
+    # Override default profile (None)
     profile = "firefox_admin"
 
     def test_require_admin_password(self):
         """
         Make sure a password is required for admin pages.
-        Use admin profile to avoid DOM-less self-signed cert error.
+        Use admin profile to bypass DOM-less self-signed cert error.
+        Calls login page object.
         """
         login = cpo.CRLoginPageObjects(self.browser)
         self.assertTrue(login.password_required(self.browser))
+
+    def test_login_fail(self):
+        """
+        Incorrect password should result in error message.
+        Calls login page object
+        """
+        password = "garbage"
+        login = cpo.CRLoginPageObjects(self.browser)
+        self.assertTrue(login.incorrect_pass_returns_error(self.browser,
+                                                           password))
 
 
 if __name__ == "__main__":
