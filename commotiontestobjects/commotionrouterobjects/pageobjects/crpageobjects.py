@@ -15,7 +15,13 @@ LOCATORS = {
     },
     "login": {
         "password_field": "focus_password",
-    }
+        # Submit
+        # Reset
+    },
+    "admin": {
+        "url-stok": False,
+        "logout": False,
+    },
 }
 
 
@@ -104,8 +110,6 @@ class CRLoginPageObjects(CRCommonPageObjects):
             + '/cgi-bin/luci/admin')
         self._verify_correct_page(__sb, self.page_url)
 
-    # Username
-    # Password
     def password_required(self, __sb):
         """Admin pages should require a password if stok url token is not 
         present.
@@ -122,8 +126,7 @@ class CRLoginPageObjects(CRCommonPageObjects):
             return True
 
 
-    # Submit
-    # Reset
+
 
 
 class CRAdminPageObjects(CRCommonPageObjects):
