@@ -3,14 +3,18 @@
 """
 
 import commotiontestobjects.commotionrouterobjects.routerobjects as cro
-from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By 
 
-locators = {
+
+# Core identifiers for each page. Each is an ID.
+LOCATORS = {
+    "common": {
+        "commotion_logo": "device",
+    },
     "login": {
-        "password": "focus_password",
+        "password_field": "focus_password",
     }
 }
 
@@ -57,6 +61,7 @@ class CRCommonPageObjects(object):
             print message
             raise message
         else:
+            print "%s loaded successfully" % __sb.current_url
             return True
 
     # Example
@@ -101,19 +106,20 @@ class CRLoginPageObjects(CRCommonPageObjects):
 
     # Username
     # Password
-    def password_required(self):
-        print "Waiting for", locators["login"]["password"]
-        #try:
-            #WebDriverWait(__sb, 10).until(
-                #EC.presence_of_element_located(
-                    #By.ID, locators["login"]["password"])
-        #except:
-            #print ("Password field locator "
-                    #+ locators["login"]["password"]
-                    #+ " not found")
-        #else:
-            #return True
-        return True
+    def password_required(self, __sb):
+        """Admin pages should require a password if stok url token is not 
+        present.
+        """
+        print "Checking for password field..."
+        try:
+            __sb.find_element_by_id(LOCATORS["login"]["password_field"])
+        except AssertionError:
+            print "Login page element %s not found" % (
+                LOCATORS["login"]["password_field"])
+            return False
+        else:
+            print "Login page requires a password"
+            return True
 
 
     # Submit
