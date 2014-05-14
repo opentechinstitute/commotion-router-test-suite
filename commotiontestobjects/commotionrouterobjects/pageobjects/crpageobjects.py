@@ -3,6 +3,16 @@
 """
 
 import commotiontestobjects.commotionrouterobjects.routerobjects as cro
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By 
+
+locators = {
+    "login": {
+        "password": "focus_password",
+    }
+}
 
 
 class CRCommonPageObjects(object):
@@ -19,15 +29,35 @@ class CRCommonPageObjects(object):
     __, commotion_client_ip = cro.get_commotion_client_ip()
     commotion_node_ip = cro.get_commotion_node_ip(commotion_client_ip)
 
+
     def _verify_correct_page(self, __sb, page_url):
         """Sanity check defined page url against url in browser"""
         __sb.get(page_url)
-        assert(__sb.current_url == page_url)
+        
+        # Wait for known-good page element
+        self.wait_for_page_load(__sb)
 
-    def wait_for(self, __sb, locator):
+        try:
+            # this assert may not work as expected
+            assert (__sb.current_url == page_url) is True
+            print __sb.current_url + " matches " + page_url
+        except AssertionError:
+            print "Rendered url %s does not match expected url %s" % (
+                    __sb.current_url, page_url)
+
+ 
+    def wait_for_page_load(self, __sb):
         """Tell selenium to wait for locator before proceeding"""
-        pass
-
+        print "Waiting for presence of known-good page element"
+        try:
+            WebDriverWait(__sb, 10).until(
+                EC.presence_of_element_located((By.ID, "device")))
+        except:
+            message = "Page element 'device' not found!"
+            print message
+            raise message
+        else:
+            return True
 
     # Example
     # From http://justinlilly.com/python/selenium-page-object-pattern-\
@@ -65,12 +95,27 @@ class CRLoginPageObjects(CRCommonPageObjects):
     def __init__(self, browser):
         super(CRLoginPageObjects, self).__init__()
         __sb = browser
-        self.page_url = 'https://' + CRCommonPageObjects.commotion_node_ip \
-            + '/cgi-bin/luci/admin'
-
+        self.page_url = ('https://' + CRCommonPageObjects.commotion_node_ip
+            + '/cgi-bin/luci/admin')
         self._verify_correct_page(__sb, self.page_url)
+
     # Username
     # Password
+    def password_required(self):
+        print "Waiting for", locators["login"]["password"]
+        #try:
+            #WebDriverWait(__sb, 10).until(
+                #EC.presence_of_element_located(
+                    #By.ID, locators["login"]["password"])
+        #except:
+            #print ("Password field locator "
+                    #+ locators["login"]["password"]
+                    #+ " not found")
+        #else:
+            #return True
+        return True
+
+
     # Submit
     # Reset
 
