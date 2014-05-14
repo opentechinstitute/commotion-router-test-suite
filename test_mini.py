@@ -18,9 +18,7 @@ class TestMini(cbo.CRBrowserTestContext):
         Use admin profile to avoid DOM-less self-signed cert error.
         """
         login = cpo.CRLoginPageObjects(self.browser)
-        test_url = 'https://' + self.netinfo.commotion_node_ip \
-            + '/cgi-bin/luci/admin'
-        self.assertEqual(login.page_url, test_url)
+        assertTrue(login.password_required())
 
         #url = 'https://' + self.netinfo.commotion_node_ip \
             #+ '/cgi-bin/luci/admin'

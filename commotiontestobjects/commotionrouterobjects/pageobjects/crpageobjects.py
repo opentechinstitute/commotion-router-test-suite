@@ -2,9 +2,7 @@
     Individual page elements are contained in xelements.py files.
 """
 
-import commotiontestobjects.browserobjects
 import commotiontestobjects.commotionrouterobjects.routerobjects as cro
-import netifaces as ni
 
 
 class CRCommonPageObjects(object):
@@ -22,10 +20,12 @@ class CRCommonPageObjects(object):
     commotion_node_ip = cro.get_commotion_node_ip(commotion_client_ip)
 
     def _verify_correct_page(self, __sb, page_url):
+        """Sanity check defined page url against url in browser"""
         __sb.get(page_url)
         assert(__sb.current_url == page_url)
 
     def wait_for(self, __sb, locator):
+        """Tell selenium to wait for locator before proceeding"""
         pass
 
 
@@ -63,7 +63,7 @@ class CRLoginPageObjects(CRCommonPageObjects):
     """
 
     def __init__(self, browser):
-        super(CRCommonPageObjects, self).__init__()
+        super(CRLoginPageObjects, self).__init__()
         __sb = browser
         self.page_url = 'https://' + CRCommonPageObjects.commotion_node_ip \
             + '/cgi-bin/luci/admin'
@@ -78,6 +78,7 @@ class CRLoginPageObjects(CRCommonPageObjects):
 class CRAdminPageObjects(CRCommonPageObjects):
     """Page objects accessible only to authenticated admin users"""
     # Side Nav
+    ## Logout
     # URL stok (Note: This also allows csrf vuln)
     #page_url = 'https://' + self.netinfo.commotion_node_ip \
             #+ '/cgi-bin/luci/admin'
