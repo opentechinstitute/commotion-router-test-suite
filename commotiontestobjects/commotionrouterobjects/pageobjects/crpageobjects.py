@@ -15,6 +15,7 @@ LOCATORS = {
     },
     "login": {
         "password_field": "focus_password",
+        # error
         # Submit
         # Reset
     },
@@ -126,6 +127,7 @@ class CRLoginPageObjects(CRCommonPageObjects):
             return True
 
     def incorrect_pass_returns_error(self, __sb, password):
+        """The login form should reject incorrect passwords"""
         return False
 
 
