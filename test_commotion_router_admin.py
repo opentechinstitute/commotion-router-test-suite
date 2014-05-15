@@ -41,7 +41,7 @@ if __name__ == "__main__":
         """Gather all tests from this module into a test suite."""
         test_suite = unittest.TestSuite()
         test_suite.addTest(unittest.makeSuite(cbo.CRBrowserTestContext))
-        test_suite.addTest(unittest.makeSuite(TestMini))
+        test_suite.addTest(unittest.makeSuite(TestFirefoxAdmin))
         return test_suite
     # Fix logging
     # https://stackoverflow.com/questions/3347019/\

@@ -55,6 +55,7 @@ def get_commotion_client_ip():
     # Will interface impact commotion tests
     commotion_interfaces = {}
     # Raw list of interfaces
+    # Could be rewritten as for __, iface in enumerate(ni.interfaces())
     interfaces = ni.interfaces()
     for iface in interfaces:
         try:
@@ -72,7 +73,7 @@ def get_commotion_client_ip():
 
     try:
         commotion_client_ip
-    except:
+    except KeyError:
         message = "No valid commotion interfaces found"
         error(message)
 
