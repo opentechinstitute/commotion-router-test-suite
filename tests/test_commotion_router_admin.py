@@ -65,30 +65,8 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
                 buggy_strings.append(malicious)
                 print "%s causes login form problems" % malicious
 
-        self.assertIsNone(buggy_strings)
-        
-        
-    #def test_login_input_validation(self):
-        #"""
-        #Pass bad strings to login page in order to break password function.
-        #password list is populated from user-defined external strings file.
-        #"""
-        #import commotiontestobjects.malicious_strings
-        #malicious_strings = ["foo\n", "bar\n", "baz\n"]
-        #buggy_strings = []
-        #login = cpo.CRLoginPageObjects(self.browser)
-        #for malicious in malicious_strings:
-            #print malicious
-            ## Test each string. Save failures until the end
-            #try:
-                #self.assertTrue(login.incorrect_pass_returns_error(
-                    #self.browser, malicious)
-                #)
-            #except:
-                #buggy_strings.append(malicious)
-                #print "%s causes login form problems" % malicious
+        self.assertEqual(list(buggy_strings), [])
 
-        #self.assertEqual(list(buggy_strings), [])
 
 
 if __name__ == "__main__":

@@ -8,16 +8,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By 
 
 
-# Core identifiers for each page. Each is an ID.
+# Core identifiers for each page.
 LOCATORS = {
     "common": {
-        "commotion_logo": "device",
+        "commotion_logo": "device", # ID
     },
     "login": {
-        "password_field": "focus_password",
-        "error": "error",
-        # Submit
-        # Reset
+        "password_field": "focus_password", # ID
+        "error": "error", # Class
+        "submit": "cbi-button-apply", # Class
+        "reset": "cbi-button-reset", # Class
     },
     "admin": {
         "url-stok": False,
@@ -137,6 +137,10 @@ class CRLoginPageObjects(CRCommonPageObjects):
         __sb.find_element_by_id(
             LOCATORS["login"]["password_field"]
             ).send_keys(password)
+
+        if "\n" not in password:
+            # Click submit if password doesn't have a newline
+            __sb.find_element_by_class_name("cbi-button-apply").click()
 
         CRCommonPageObjects.wait_for_element_of_type(
             self, __sb, "CLASS_NAME", LOCATORS["login"]["error"]
