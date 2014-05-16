@@ -15,7 +15,7 @@ LOCATORS = {
     },
     "login": {
         "password_field": "focus_password",
-        # error
+        "error": "error",
         # Submit
         # Reset
     },
@@ -44,7 +44,7 @@ class CRCommonPageObjects(object):
     def _verify_correct_page(self, __sb, page_url):
         """Sanity check defined page url against url in browser"""
         __sb.get(page_url)
-        
+
         # Wait for known-good page element
         self.wait_for_page_load(__sb)
 
@@ -69,23 +69,26 @@ class CRCommonPageObjects(object):
             raise message
         else:
             print "%s loaded successfully" % __sb.current_url
+
+    def wait_for_element_of_type(self, __sb, etype, element):
+        """
+        Tell selenium to wait for a specific locator of specific type 
+        before proceeding.
+        """
+        print "Waiting for %s, type %s" % (element, etype)
+        try:
+            WebDriverWait(__sb, 10).until(
+                EC.presence_of_element_located((
+                    (
+                        getattr(By,etype)), element
+                    )))
+        except AssertionError:
+            print "Page element %s of type %s not found!" % (
+                element, etype
+                )
+        else:
+            print "Page element %s found." % element
             return True
-
-    # Example
-    # From http://justinlilly.com/python/selenium-page-object-pattern-\
-    #    -the-key-to-maintainable-tests.html
-    # These are currently handled in tests and browserobjects
-    #
-    #def fill_form_by_css(self, form_css, value):
-        #elem = self.driver.find(form_css)
-        #elem.send_keys(value)
-
-    #def fill_form_by_id(self, form_element_id, value):
-        #return self.fill_form_by_css('#%s' % form_element_id, value)
-
-    #def navigate(self):
-        #self.driver.get(self.url)
-    # End example
 
     # thisnode url
     # Header
@@ -120,7 +123,8 @@ class CRLoginPageObjects(CRCommonPageObjects):
             __sb.find_element_by_id(LOCATORS["login"]["password_field"])
         except AssertionError:
             print "Login page element %s not found" % (
-                LOCATORS["login"]["password_field"])
+                LOCATORS["login"]["password_field"]
+                )
             return False
         else:
             print "Login page requires a password"
@@ -128,7 +132,23 @@ class CRLoginPageObjects(CRCommonPageObjects):
 
     def incorrect_pass_returns_error(self, __sb, password):
         """The login form should reject incorrect passwords"""
-        return False
+        print "Testing user-supplied password"
+        __sb.find_element_by_id(
+            LOCATORS["login"]["password_field"]
+            ).send_keys(password)
+
+        CRCommonPageObjects.wait_for_element_of_type(
+            self, __sb, "CLASS_NAME", LOCATORS["login"]["error"]
+            )
+
+        if __sb.find_element_by_class_name(
+            LOCATORS["login"]["error"]).is_displayed():
+            print "Login page displays error message on incorrect password"
+            return True
+        else:
+            print "Login page does not display error message " \
+                "on incorrect password"
+            return False
 
 
 class CRAdminPageObjects(CRCommonPageObjects):

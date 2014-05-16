@@ -29,10 +29,33 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
         Incorrect password should result in error message.
         Calls login page object
         """
-        password = "garbage"
+        password = "garbage\n"
         login = cpo.CRLoginPageObjects(self.browser)
-        self.assertTrue(login.incorrect_pass_returns_error(self.browser,
-                                                           password))
+        self.assertTrue(login.incorrect_pass_returns_error(
+            self.browser, password)
+            )
+
+    def test_login_succeed(self):
+        """
+        Correct password should allow access to admin functions.
+        Password should be defined at runtime
+        """
+        password = "garbage\n"
+        self.assertTrue(login.correct_pass_allows_access(
+            self.browser, password)
+            )
+
+    def test_login_input_validation(self):
+        """
+        Pass bad strings to login page in order to break password function.
+        password list is populated from user-defined external strings file.
+        """
+        password = "garbage\n" # Pull in strings from doc
+        login = cpo.CRLoginPageObjects(self.browser)
+        for __, malicious in enumerate(password):
+            print malicious
+        # Placeholder because we know this doesn't pass
+        assertEqual(1, 2)
 
 
 if __name__ == "__main__":
@@ -44,8 +67,7 @@ if __name__ == "__main__":
         test_suite.addTest(unittest.makeSuite(TestFirefoxAdmin))
         return test_suite
     # Fix logging
-    # https://stackoverflow.com/questions/3347019/\
-    #    how-can-one-use-the-logging-module-in-python-with-the-unittest-module
+    # https://stackoverflow.com/questions/3347019/how-can-one-use-the-logging-module-in-python-with-the-unittest-module
     browser_suite = suite()
     runner = unittest.TextTestRunner()
     runner.run(browser_suite)
