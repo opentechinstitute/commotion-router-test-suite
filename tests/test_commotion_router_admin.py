@@ -41,6 +41,7 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
         Password should be defined at runtime
         """
         password = "garbage\n"
+        login = cpo.CRLoginPageObjects(self.browser)
         self.assertTrue(login.correct_pass_allows_access(
             self.browser, password)
             )
@@ -50,8 +51,7 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
         Pass bad strings to login page in order to break password function.
         password list is populated from user-defined external strings file.
         """
-        print "To do: Read strings from external file"
-        malicious_strings = []
+        from commotiontestobjects.malicious_strings import malicious_strings
         buggy_strings = []
         login = cpo.CRLoginPageObjects(self.browser)
         for __, malicious in enumerate(malicious_strings):
@@ -65,7 +65,30 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
                 buggy_strings.append(malicious)
                 print "%s causes login form problems" % malicious
 
-        assertIsNone(buggy_strings)
+        self.assertIsNone(buggy_strings)
+        
+        
+    #def test_login_input_validation(self):
+        #"""
+        #Pass bad strings to login page in order to break password function.
+        #password list is populated from user-defined external strings file.
+        #"""
+        #import commotiontestobjects.malicious_strings
+        #malicious_strings = ["foo\n", "bar\n", "baz\n"]
+        #buggy_strings = []
+        #login = cpo.CRLoginPageObjects(self.browser)
+        #for malicious in malicious_strings:
+            #print malicious
+            ## Test each string. Save failures until the end
+            #try:
+                #self.assertTrue(login.incorrect_pass_returns_error(
+                    #self.browser, malicious)
+                #)
+            #except:
+                #buggy_strings.append(malicious)
+                #print "%s causes login form problems" % malicious
+
+        #self.assertEqual(list(buggy_strings), [])
 
 
 if __name__ == "__main__":

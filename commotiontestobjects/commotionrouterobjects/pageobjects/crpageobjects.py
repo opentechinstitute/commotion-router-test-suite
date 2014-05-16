@@ -132,6 +132,7 @@ class CRLoginPageObjects(CRCommonPageObjects):
 
     def incorrect_pass_returns_error(self, __sb, password):
         """The login form should reject incorrect passwords"""
+        ### ADD A CONDITIONAL SUBMIT IF STRING DOESN'T CONTAIN \n
         print "Testing user-supplied password"
         __sb.find_element_by_id(
             LOCATORS["login"]["password_field"]
@@ -149,28 +150,6 @@ class CRLoginPageObjects(CRCommonPageObjects):
             print "Login page does not display error message " \
                 "on incorrect password"
             return False
-
-    def test_login_input_validation(self):
-        """
-        Pass bad strings to login page in order to break password function.
-        password list is populated from user-defined external strings file.
-        """
-        print "To do: Read strings from external file"
-        malicious_strings = ["foo\n", "bar\n", "baz\n"]
-        buggy_strings = []
-        login = cpo.CRLoginPageObjects(self.browser)
-        for malicious in malicious_strings:
-            print malicious
-            # Test each string. Save failures until the end
-            try:
-                self.assertTrue(login.incorrect_pass_returns_error(
-                    self.browser, malicious)
-                )
-            except:
-                buggy_strings.append(malicious)
-                print "%s causes login form problems" % malicious
-
-        self.assertEqual(list(buggy_strings), [])
 
     def correct_pass_allows_access(self, __sb, password):
         pass
