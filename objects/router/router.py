@@ -1,5 +1,5 @@
 """Test components specific to Commotion Routers"""
-from commotiontestobjects.util import error
+from objects.util import error
 import bunch
 import netifaces as ni
 import re

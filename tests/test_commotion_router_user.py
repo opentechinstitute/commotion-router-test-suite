@@ -15,7 +15,7 @@
 # Write logging functions
 
 import unittest
-import commotiontestobjects.browserobjects as cbo
+import objects.browser as cbo
 import logging
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC

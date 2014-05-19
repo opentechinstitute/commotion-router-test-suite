@@ -4,9 +4,8 @@
 """
 
 import unittest
-import commotiontestobjects.browserobjects as cbo
-import commotiontestobjects.commotionrouterobjects.pageobjects.crpageobjects \
-    as cpo
+import objects.browser as cbo
+import objects.router.page.page as cpo
 
 
 class TestFirefoxAdmin(cbo.CRBrowserTestContext):
@@ -51,7 +50,7 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
         Pass bad strings to login page in order to break password function.
         password list is populated from user-defined external strings file.
         """
-        from commotiontestobjects.malicious_strings import MALICIOUS_STRINGS
+        from objects.malicious_strings import MALICIOUS_STRINGS
         buggy_strings = []
         login = cpo.CRLoginPageObjects(self.browser)
         for __, malicious in enumerate(MALICIOUS_STRINGS):

@@ -2,7 +2,7 @@
     Individual page elements are contained in xelements.py files.
 """
 
-import commotiontestobjects.commotionrouterobjects.routerobjects as cro
+import objects.router.router as cro
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By 

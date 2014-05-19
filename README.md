@@ -21,19 +21,21 @@ _________________
 + Selenium
 + Unittest
 + Logging
++ Random
 
 
 Basic Structure
 _______________
 
-+ tests
-+ commotiontestobjects/ - Objects representing the user
-++ browserobjects
-++ util
-++ commotionrouterobjects/ - Objects representing router nodes
-+++ routerobjects - router-specific node objects
-+++ pageobjects/ - Objects found only in router-based UI pages
-++++ crpageobjects - Functions to build UI page models from component elements
++ tests/ - Unit tests, separated by type or profile
++ objects/ - All objects used in the tests
+++ browser.py - Objects representing the browser/user
+++ malicious_strings.py - Standard strings for use in input validation tests
+++ util.py - Utility functions
+++ router/ - Objects used in router-based tests
++++ router.py - router-specific node objects
++++ page/ - Objects found only in router-based UI pages
+++++ page.py - Page definitions for router-based nodes
 
 
 Resources

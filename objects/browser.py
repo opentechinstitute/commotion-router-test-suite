@@ -1,7 +1,7 @@
 """Profiles and browser definitions for use in unit tests"""
 import unittest
 import logging
-import commotiontestobjects.commotionrouterobjects.routerobjects as cro
+import objects.router.router as cro
 from selenium import webdriver
 
 class CRBrowserTestContext(unittest.TestCase):
