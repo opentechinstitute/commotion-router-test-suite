@@ -51,10 +51,10 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
         Pass bad strings to login page in order to break password function.
         password list is populated from user-defined external strings file.
         """
-        from commotiontestobjects.malicious_strings import malicious_strings
+        from commotiontestobjects.malicious_strings import MALICIOUS_STRINGS
         buggy_strings = []
         login = cpo.CRLoginPageObjects(self.browser)
-        for __, malicious in enumerate(malicious_strings):
+        for __, malicious in enumerate(MALICIOUS_STRINGS):
             print malicious
             # Test each string. Save failures until the end
             try:
