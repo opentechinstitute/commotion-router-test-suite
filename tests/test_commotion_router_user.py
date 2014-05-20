@@ -10,6 +10,12 @@ import objects.router.page.page as cpo
 class TestFirefoxUnprivileged(cbo.CRBrowserTestContext):
     """Unittest child class for unprivileged functions"""
 
+    def test_show_correct_version(self):
+        """Check the footer for the current Commotion revision"""
+        home = cpo.CRHomePageObjects(self.browser)
+        test_rev = "Commotion Router Release 1.1rc2"
+        self.assertTrue(home.show_current_rev(self.browser, test_rev))
+
     def test_default_no_user_apps(self):
         """
         By default, the router homepage should not allow unprivileged

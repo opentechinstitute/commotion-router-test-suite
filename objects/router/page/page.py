@@ -12,6 +12,7 @@ from selenium.webdriver.common.by import By
 LOCATORS = {
     "common": {
         "commotion_logo": "device", # ID
+        "version": "credits", # Class - requires add'l filtering
     },
     "login": {
         "password_field": "focus_password", # ID
@@ -78,6 +79,9 @@ class CRCommonPageObjects(object):
         """
         Tell selenium to wait for a specific locator of specific type 
         before proceeding.
+
+        Valid types: ID, CLASS_NAME, CSS_SELECTOR, LINK_TEXT, NAME, 
+            PARTIAL_LINK_TEXT, TAG_NAME, XPATH
         """
         print "Waiting for %s, type %s" % (element, etype)
         try:
@@ -94,6 +98,7 @@ class CRCommonPageObjects(object):
             print "Page element %s found." % element
             return True
 
+
     # thisnode url
     # Header
     # Footer
@@ -109,9 +114,30 @@ class CRHomePageObjects(CRCommonPageObjects):
             + '/cgi-bin/luci')
         self._verify_correct_page(__sb, self.page_url)
 
+
+    def show_current_rev(self, __sb, test_rev):
+        """Check page footer for commotion version number.
+        This is actually a common object but common class
+        isn't written to accept tests."""
+        print "Checking footer for correct Commotion Revision"
+        CRCommonPageObjects.wait_for_element_of_type(
+            self, __sb, "CLASS_NAME", LOCATORS["common"]["version"]
+            )
+        print "Comparing versions"
+        page_rev = __sb.find_element_by_class_name(LOCATORS["common"]
+                                                   ["version"])
+        # Could also use page_rev.text.endswith(test_rev)
+        if test_rev not in page_rev.text:
+            print "Footer version %s does not match test version %s", (
+                page_rev.text, test_rev)
+            return False
+        else:
+            return True
+
+
     def users_can_add_apps(self, __sb):
+        """When enabled, unprivileged users can add apps from the homepage"""
         print "Checking for app add button..."
-        return False
         try:
             __sb.find_element_by_id(LOCATORS["home"]["user-add-app"])
         except AssertionError:
@@ -151,7 +177,6 @@ class CRLoginPageObjects(CRCommonPageObjects):
 
     def incorrect_pass_returns_error(self, __sb, password):
         """The login form should reject incorrect passwords"""
-        ### ADD A CONDITIONAL SUBMIT IF STRING DOESN'T CONTAIN \n
         print "Testing user-supplied password"
         __sb.find_element_by_id(
             LOCATORS["login"]["password_field"]
@@ -175,6 +200,8 @@ class CRLoginPageObjects(CRCommonPageObjects):
             return False
 
     def correct_pass_allows_access(self, __sb, password):
+        """Correct password in login form should allow access to admin 
+        pages"""
         pass
 
 
