@@ -10,15 +10,6 @@ import objects.router.page.page as cpo
 class TestFirefoxUnprivileged(cbo.CRBrowserTestContext):
     """Unittest child class for unprivileged functions"""
 
-    #def test_require_admin_password(self):
-        #"""
-        #Make sure a password is required for admin pages.
-        #Use admin profile to bypass DOM-less self-signed cert error.
-        #Calls login page object.
-        #"""
-        #login = cpo.CRLoginPageObjects(self.browser)
-        #self.assertTrue(login.password_required(self.browser))
-
     def test_default_no_user_apps(self):
         """
         By default, the router homepage should not allow unprivileged
