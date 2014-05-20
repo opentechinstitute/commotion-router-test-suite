@@ -19,6 +19,10 @@ LOCATORS = {
         "submit": "cbi-button-apply", # Class
         "reset": "cbi-button-reset", # Class
     },
+    "home": {
+        "apps-header": "appsH2", # Class
+        "user-add-app": "add_app", # ID
+    },
     "admin": {
         "url-stok": False,
         "logout": False,
@@ -98,8 +102,13 @@ class CRCommonPageObjects(object):
 
 class CRHomePageObjects(CRCommonPageObjects):
     """Objects found on Commotion Router's default landing page"""
-    pass
-#    page_url = netinfo.commotion_node_ip + '/cgi-bin/luci'
+    def __init__(self, browser):
+        super(CRLoginPageObjects, self).__init__()
+        __sb = browser
+        self.page_url = ('https://' + CRCommonPageObjects.commotion_node_ip
+            + '/cgi-bin/luci')
+        self._verify_correct_page(__sb, self.page_url)
+
 
 
 class CRLoginPageObjects(CRCommonPageObjects):
