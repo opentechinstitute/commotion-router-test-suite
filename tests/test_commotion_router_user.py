@@ -1,28 +1,13 @@
 """Sample automated test suite for commotion router's unprivileged functions.
-    Partially broken.
-    Most of these are an inefficient use of selenium, 
-    but are included as examples.
+   These are an inefficient use of selenium, but are included as examples.
 """
-
-# pylint complains about unittest's method names
-#method-rgx=(([a-z_][a-z0-9_]{2,30})| \
-#    (setUp)|(setUpClass)|(tearDown)|(tearDownClass))$
-
-# To do:
-# Write Commotion-Router UI map for Selenium
-# (See also Page Object Design Pattern)
-# Write input fuzzers
-# Write logging functions
 
 import unittest
 import objects.browser as cbo
-import logging
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
+import objects.router.page.page as cpo
 
 
-class TestCRUserFunctions(cbo.CRBrowserTestContext):
+class TestFirefoxUnprivileged(cbo.CRBrowserTestContext):
     """Unittest child class for unprivileged functions"""
 
     def test_ip_address(self):
