@@ -5,7 +5,8 @@
 import objects.router.router as cro
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By 
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
 
 # Core identifiers for each page.
@@ -68,7 +69,7 @@ class CRCommonPageObjects(object):
         try:
             WebDriverWait(__sb, 10).until(
                 EC.presence_of_element_located((By.ID, "device")))
-        except:
+        except NoSuchElementException:
             message = "Page element 'device' not found!"
             print message
             raise message
@@ -90,7 +91,7 @@ class CRCommonPageObjects(object):
                     (
                         getattr(By,etype)), element
                     )))
-        except AssertionError:
+        except NoSuchElementException:
             print "Page element %s of type %s not found!" % (
                 element, etype
                 )
@@ -140,7 +141,7 @@ class CRHomePageObjects(CRCommonPageObjects):
         print "Checking for app add button..."
         try:
             __sb.find_element_by_id(LOCATORS["home"]["user-add-app"])
-        except AssertionError:
+        except NoSuchElementException:
             return False
         else:
             print "Users can add applications from the homepage"
@@ -166,7 +167,7 @@ class CRLoginPageObjects(CRCommonPageObjects):
         print "Checking for password field..."
         try:
             __sb.find_element_by_id(LOCATORS["login"]["password_field"])
-        except AssertionError:
+        except NoSuchElementException:
             print "Login page element %s not found" % (
                 LOCATORS["login"]["password_field"]
                 )
@@ -189,7 +190,7 @@ class CRLoginPageObjects(CRCommonPageObjects):
         CRCommonPageObjects.wait_for_element_of_type(
             self, __sb, "CLASS_NAME", LOCATORS["login"]["error"]
             )
-
+        # Rewrite as try/except NoSuchElementException/else
         if __sb.find_element_by_class_name(
             LOCATORS["login"]["error"]).is_displayed():
             print "Login page displays error message on incorrect password"
