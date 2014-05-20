@@ -10,25 +10,23 @@ import objects.router.page.page as cpo
 class TestFirefoxUnprivileged(cbo.CRBrowserTestContext):
     """Unittest child class for unprivileged functions"""
 
-    def test_ip_address(self):
-        """Test ip-only connection"""
-        __sb = self.browser
+    #def test_require_admin_password(self):
+        #"""
+        #Make sure a password is required for admin pages.
+        #Use admin profile to bypass DOM-less self-signed cert error.
+        #Calls login page object.
+        #"""
+        #login = cpo.CRLoginPageObjects(self.browser)
+        #self.assertTrue(login.password_required(self.browser))
 
-        __sb.get('https://' + self.netinfo.commotion_node_ip)
-        WebDriverWait(__sb, 10).until(
-            EC.presence_of_element_located((By.ID, "device")))
-        self.assertTrue(__sb.find_element_by_id("device"))
-
-    @unittest.skipIf(1 == 1,
-                     "Skip if wlan0 provides commotion ip and eth0 is in use")
-    def test_thisnode(self):
-        """Test thisnode dns resolution"""
-        # SKIP THIS TEST if wlan0 provides commotion ip and eth0 is in use
-        __sb = self.browser
-        __sb.get('https://thisnode')
-        WebDriverWait(__sb, 10).until(
-            EC.presence_of_element_located((By.ID, "device")))
-        self.assertTrue(__sb.find_element_by_id("device"))
+    def test_default_does_not_allow_user_applications(self)
+        """
+        By default, the router homepage should not allow unprivileged
+        users to add applications.
+        Calls homepage object.
+        """
+        home = cpo.CRHomePageObjects(self.browser)
+        self.assertFalse(home.users_can_add_apps(self.browser))
 
 
 if __name__ == "__main__":
