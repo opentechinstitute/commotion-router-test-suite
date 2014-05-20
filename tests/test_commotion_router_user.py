@@ -28,7 +28,7 @@ class TestCRUserFunctions(cbo.CRBrowserTestContext):
     def test_ip_address(self):
         """Test ip-only connection"""
         __sb = self.browser
-        
+
         __sb.get('https://' + self.netinfo.commotion_node_ip)
         WebDriverWait(__sb, 10).until(
             EC.presence_of_element_located((By.ID, "device")))
@@ -44,71 +44,6 @@ class TestCRUserFunctions(cbo.CRBrowserTestContext):
         WebDriverWait(__sb, 10).until(
             EC.presence_of_element_located((By.ID, "device")))
         self.assertTrue(__sb.find_element_by_id("device"))
-
-
-class TestCRAdminFunctions(cbo.CRBrowserTestContext):
-    """Test admin functions. Note browser profile change"""
-
-    profile = "firefox_admin"
-
-    def test_require_admin_password(self):
-        """
-        Make sure a password is required for admin pages.
-        Use admin profile to avoid DOM-less self-signed cert error.
-        """
-        __sb = self.browser
-        url = 'https://' + self.netinfo.commotion_node_ip \
-            + '/cgi-bin/luci/admin'
-        __sb.get(url)
-        WebDriverWait(__sb, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
-        self.assertTrue(__sb.find_element_by_class_name("cbi-input-user"))
-
-    def test_log_in_fail(self):
-        """Incorrect password should return error"""
-        __sb = self.browser
-        url = 'https://' + self.netinfo.commotion_node_ip \
-            + '/cgi-bin/luci/admin'
-        __sb.get(url)
-        WebDriverWait(__sb, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
-        pw_field = __sb.find_element_by_id("focus_password")
-        pw_field.send_keys("BADPASS\n")
-        WebDriverWait(__sb, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "error")))
-        self.assertTrue(__sb.find_element_by_class_name("error"))
-
-    def test_fuzz_admin_password_field(self):
-        """Try to break password function using garbage input"""
-        # This should eventually replace test_log_in_fail
-        __sb = self.browser
-        url = 'https://' + self.netinfo.commotion_node_ip \
-            + '/cgi-bin/luci/admin'
-        __sb.get(url)
-        WebDriverWait(__sb, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
-        # fuzz = gen_fuzz(params)
-        # for garbage in fuzz:
-        #       pw_field = __sb.find_element_by_id("focus_password")
-        #       pw_field.send_keys(garbage)
-        #       WebDriverWait(__sb, 10).until(
-        #           EC.presence_of_element_located((By.CLASS_NAME, "error")))
-        #       seleniumVerifyTrue(__sb.find_element_by_class_name("error"))
-        # assertTrue(noSeleniumVerifyFailures)
-
-    def test_log_in_pass(self):
-        """Correct password should allow access to privileged functions"""
-        __sb = self.browser
-        url = 'https://' + self.netinfo.commotion_node_ip \
-            + '/cgi-bin/luci/admin'
-        __sb.get(url)
-        WebDriverWait(__sb, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "cbi-input-user")))
-        __sb.find_element_by_id("focus_password").send_keys('asdf')
-        # Should actually check for div.error
-        WebDriverWait(__sb, 10).until(
-            EC.presence_of_element_located((By.ID, "xhr_poll_status")))
-        self.assertTrue(__sb.find_element_by_id("xhr_poll_status"))
 
 
 if __name__ == "__main__":
