@@ -19,7 +19,7 @@ class TestFirefoxUnprivileged(cbo.CRBrowserTestContext):
         #login = cpo.CRLoginPageObjects(self.browser)
         #self.assertTrue(login.password_required(self.browser))
 
-    def test_default_does_not_allow_user_applications(self)
+    def test_default_no_user_apps(self):
         """
         By default, the router homepage should not allow unprivileged
         users to add applications.
@@ -34,9 +34,7 @@ if __name__ == "__main__":
     def suite():
         """Gather all tests from this module into a test suite."""
         test_suite = unittest.TestSuite()
-        test_suite.addTest(unittest.makeSuite(cbo.CRBrowserTestContext))
-        test_suite.addTest(unittest.makeSuite(TestCRUserFunctions))
-        test_suite.addTest(unittest.makeSuite(TestCRAdminFunctions))
+        test_suite.addTest(unittest.makeSuite(TestFirefoxUnprivileged))
         return test_suite
     # Fix logging
     # https://stackoverflow.com/questions/3347019/\

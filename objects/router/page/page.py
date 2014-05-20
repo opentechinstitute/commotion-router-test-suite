@@ -103,12 +103,22 @@ class CRCommonPageObjects(object):
 class CRHomePageObjects(CRCommonPageObjects):
     """Objects found on Commotion Router's default landing page"""
     def __init__(self, browser):
-        super(CRLoginPageObjects, self).__init__()
+        super(CRHomePageObjects, self).__init__()
         __sb = browser
         self.page_url = ('https://' + CRCommonPageObjects.commotion_node_ip
             + '/cgi-bin/luci')
         self._verify_correct_page(__sb, self.page_url)
 
+    def users_can_add_apps(self, __sb):
+        print "Checking for app add button..."
+        return False
+        try:
+            __sb.find_element_by_id(LOCATORS["home"]["user-add-app"])
+        except AssertionError:
+            return False
+        else:
+            print "Users can add applications from the homepage"
+            return True
 
 
 class CRLoginPageObjects(CRCommonPageObjects):
