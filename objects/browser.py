@@ -10,10 +10,10 @@ class CRBrowserTestContext(unittest.TestCase):
     browser = "firefox"
     profile = "default"
 
-    logging.basicConfig(filename='../logs/test_commotion_router_ui.log',
-                        level=logging.INFO)
-    logging.warning("Specify path to log directory")
-    logging.warning("This test suite needs a UI map!")
+    #logging.basicConfig(filename='../logs/test_commotion_router_ui.log',
+                        #level=logging.INFO)
+    #logging.warning("Specify path to log directory")
+    #logging.warning("This test suite needs a UI map!")
 
     @classmethod
     def setUpClass(cls):
