@@ -6,7 +6,7 @@ import pytest
 
 # Standard pytest command line options
 PYTEST_OPTS = {
-    "log_dir": None, # Usage: --logdir=/foo/bar/baz.log
+    "log_dir": "--resultlog=logs/pytest.log", # Usage: --logdir=/foo/bar/baz.log
     "verbose": "-v", # Options: -v or None
     "slow_tests": "--durations=5",
     "stdout": "-s",
