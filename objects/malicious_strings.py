@@ -51,6 +51,24 @@ MALICIOUS_STRINGS = [
     '$(id)',
     'javascript://127.0.0.1/?%0d%0aalert(document.domain)',
     '../../../README.md%20',
+    'AAAA%08x.%08x.%08x.%08x.%08x.%08x.%08x.%08x.%08x.%08x.%08x.%08x',
+    '0.0.0.0',
+    '-124.134.23.1',
+    '2000::',
+    '::',
+#    ' £ € « » ♠ ♣ ♥ ♦ ¿ �', # \xc2 (&nbsp;) Causes encoding error. Find it and fix it.
+    '{ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,a,a,a,a,a,a,a,a,a,a }',
+    './sbin/reboot',
+    './sbin/firstboot',
+    '(╯°□°）╯︵ ┻━┻',
+    '65537',
+    '1',
+    '-1',
+    '-666',
+    '6553-6555',
+    '5-100',
+    'root',
+    'meat',
     #Protocols & Paths:
     #http://
     #https://
