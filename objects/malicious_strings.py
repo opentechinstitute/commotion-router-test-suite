@@ -1,3 +1,4 @@
+# coding=utf-8
 """Malicious, incorrect, and/or plausible strings for use in Commotion
 input validation tests"""
 from __future__ import unicode_literals
@@ -56,7 +57,8 @@ MALICIOUS_STRINGS = [
     '-124.134.23.1',
     '2000::',
     '::',
-#    ' £ € « » ♠ ♣ ♥ ♦ ¿ �', # \xc2 (&nbsp;) Causes encoding error. Find it and fix it.
+    # http://farmdev.com/talks/unicode/
+    ' £ € « » ♠ ♣ ♥ ♦ ¿ �', # \xc2 (&nbsp;) Causes encoding error.
     '{ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,a,a,a,a,a,a,a,a,a,a }',
     './sbin/reboot',
     './sbin/firstboot',
