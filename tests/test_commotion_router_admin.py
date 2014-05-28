@@ -21,7 +21,8 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
         Calls login page object.
         """
         login = cpo.CRLoginPageObjects(self.browser)
-        self.assertTrue(login.password_required(self.browser))
+        self.assertTrue(login.password_required(self.browser), 
+                        'Admin pages not password protected')
 
     def test_login_fail(self):
         """
@@ -31,9 +32,12 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
         password = "garbage\n"
         login = cpo.CRLoginPageObjects(self.browser)
         self.assertTrue(login.incorrect_pass_returns_error(
-            self.browser, password)
+            self.browser, password),
+            'Failed login does not return error'
             )
 
+    # Will fail until correct pass configured
+    @unittest.expectedFailure
     def test_login_succeed(self):
         """
         Correct password should allow access to admin functions.
@@ -42,7 +46,8 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
         password = "garbage\n"
         login = cpo.CRLoginPageObjects(self.browser)
         self.assertTrue(login.correct_pass_allows_access(
-            self.browser, password)
+            self.browser, password),
+            'Login form does not allow access on correct password'
             )
 
     def test_login_input_validation(self):
@@ -53,14 +58,15 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
         from objects.malicious_strings import MALICIOUS_STRINGS
         buggy_strings = []
         login = cpo.CRLoginPageObjects(self.browser)
-        for __, malicious in enumerate(MALICIOUS_STRINGS):
+        for _, malicious in enumerate(MALICIOUS_STRINGS):
             print malicious
             # Test each string. Save failures until the end
             try:
                 self.assertTrue(login.incorrect_pass_returns_error(
-                    self.browser, malicious)
+                    self.browser, malicious),
+                    'Password form does not validate strings correctly'
                 )
-            except:
+            except ValueError:
                 buggy_strings.append(malicious)
                 print "%s causes login form problems" % malicious
 
@@ -78,6 +84,6 @@ if __name__ == "__main__":
         return test_suite
     # Fix logging
     # https://stackoverflow.com/questions/3347019/how-can-one-use-the-logging-module-in-python-with-the-unittest-module
-    browser_suite = suite()
-    runner = unittest.TextTestRunner()
-    runner.run(browser_suite)
+    BROWSER_SUITE = suite()
+    RUNNER = unittest.TextTestRunner()
+    RUNNER.run(BROWSER_SUITE)

@@ -14,7 +14,8 @@ class TestFirefoxUnprivileged(cbo.CRBrowserTestContext):
         """Check the footer for the current Commotion revision"""
         home = cpo.CRHomePageObjects(self.browser)
         test_rev = "Commotion Router Release 1.1rc2"
-        self.assertTrue(home.show_current_rev(self.browser, test_rev))
+        self.assertTrue(home.show_current_rev(self.browser, test_rev),
+                        'Incorrect revision in footer')
 
     def test_default_no_user_apps(self):
         """
@@ -23,7 +24,8 @@ class TestFirefoxUnprivileged(cbo.CRBrowserTestContext):
         Calls homepage object.
         """
         home = cpo.CRHomePageObjects(self.browser)
-        self.assertFalse(home.users_can_add_apps(self.browser))
+        self.assertFalse(home.users_can_add_apps(self.browser),
+                         'Default app permissions incorrect')
 
 
 if __name__ == "__main__":
@@ -36,6 +38,6 @@ if __name__ == "__main__":
     # Fix logging
     # https://stackoverflow.com/questions/3347019/\
     #    how-can-one-use-the-logging-module-in-python-with-the-unittest-module
-    browser_suite = suite()
-    runner = unittest.TextTestRunner()
-    runner.run(browser_suite)
+    BROWSER_SUITE = suite()
+    RUNNER = unittest.TextTestRunner()
+    RUNNER.run(BROWSER_SUITE)
