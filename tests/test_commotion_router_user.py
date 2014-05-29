@@ -14,6 +14,7 @@ class TestFirefoxUnprivileged(cbo.BrowserTestContext):
         """Check the footer for the current Commotion revision"""
         home = cpo.CRHomePage(self.browser)
         test_rev = "Commotion Router Release 1.1rc2"
+        # This should return the footer string instead, then assertEqual
         self.assertTrue(home.show_current_rev(self.browser, test_rev),
                         'Incorrect revision in footer')
 

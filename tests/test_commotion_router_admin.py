@@ -60,7 +60,10 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
         login = cpo.CRLoginPage(self.browser)
         for _, malicious in enumerate(MALICIOUS_STRINGS):
             print malicious
-            # Test each string. Save failures until the end
+            # This test needs revision.
+            # 1. exception will probably end the test early
+            # 2. error message stays on screen after first attempt,
+            #    so pass condition is always true
             try:
                 self.assertTrue(login.incorrect_pass_returns_error(
                     self.browser, malicious),
