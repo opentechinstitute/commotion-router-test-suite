@@ -106,10 +106,10 @@ class CRCommonPage(object):
     # Body
 
 
-class CRHomePageObjects(CRCommonPage):
+class CRHomePage(CRCommonPage):
     """Objects found on Commotion Router's default landing page"""
     def __init__(self, browser):
-        super(CRHomePageObjects, self).__init__()
+        super(CRHomePage, self).__init__()
         __sb = browser
         self.page_url = ('https://' + CRCommonPage.commotion_node_ip
             + '/cgi-bin/luci')
