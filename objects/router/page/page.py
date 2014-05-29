@@ -32,7 +32,7 @@ LOCATORS = {
 }
 
 
-class CRCommonPageObjects(object):
+class CRCommonPage(object):
     """Page objects common to all Commotion Router pages"""
 
     def __init__(self):
@@ -106,12 +106,12 @@ class CRCommonPageObjects(object):
     # Body
 
 
-class CRHomePageObjects(CRCommonPageObjects):
+class CRHomePageObjects(CRCommonPage):
     """Objects found on Commotion Router's default landing page"""
     def __init__(self, browser):
         super(CRHomePageObjects, self).__init__()
         __sb = browser
-        self.page_url = ('https://' + CRCommonPageObjects.commotion_node_ip
+        self.page_url = ('https://' + CRCommonPage.commotion_node_ip
             + '/cgi-bin/luci')
         self._verify_correct_page(__sb, self.page_url)
 
@@ -121,7 +121,7 @@ class CRHomePageObjects(CRCommonPageObjects):
         This is actually a common object but common class
         isn't written to accept tests."""
         print "Checking footer for correct Commotion Revision"
-        CRCommonPageObjects.wait_for_element_of_type(
+        CRCommonPage.wait_for_element_of_type(
             self, __sb, "CLASS_NAME", LOCATORS["common"]["version"]
             )
         print "Comparing versions"
@@ -148,7 +148,7 @@ class CRHomePageObjects(CRCommonPageObjects):
             return True
 
 
-class CRLoginPageObjects(CRCommonPageObjects):
+class CRLoginPageObjects(CRCommonPage):
     """Page objects specific to Commotion Router login page.
         Note that the login page triggers a DOM-less cert error
     """
@@ -156,7 +156,7 @@ class CRLoginPageObjects(CRCommonPageObjects):
     def __init__(self, browser):
         super(CRLoginPageObjects, self).__init__()
         __sb = browser
-        self.page_url = ('https://' + CRCommonPageObjects.commotion_node_ip
+        self.page_url = ('https://' + CRCommonPage.commotion_node_ip
             + '/cgi-bin/luci/admin')
         self._verify_correct_page(__sb, self.page_url)
 
@@ -187,7 +187,7 @@ class CRLoginPageObjects(CRCommonPageObjects):
             # Click submit if password doesn't have a newline
             __sb.find_element_by_class_name("cbi-button-apply").click()
 
-        CRCommonPageObjects.wait_for_element_of_type(
+        CRCommonPage.wait_for_element_of_type(
             self, __sb, "CLASS_NAME", LOCATORS["login"]["error"]
             )
         # Rewrite as try/except NoSuchElementException/else
@@ -207,7 +207,7 @@ class CRLoginPageObjects(CRCommonPageObjects):
 
 
 
-class CRAdminPageObjects(CRCommonPageObjects):
+class CRAdminPageObjects(CRCommonPage):
     """Page objects accessible only to authenticated admin users"""
     # Side Nav
     ## Logout
