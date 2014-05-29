@@ -207,7 +207,7 @@ class CRLoginPage(CRCommonPage):
 
 
 
-class CRAdminPageObjects(CRCommonPage):
+class CRAdminPage(CRCommonPage):
     """Page objects accessible only to authenticated admin users"""
     # Side Nav
     ## Logout
