@@ -16,7 +16,7 @@ LOCATORS = {
         "version": "credits", # Class - requires add'l filtering
     },
     "login": {
-        "username_field": "username" # Name
+        "username_field": "username", # Name
         "password_field": "focus_password", # ID
         "error": "error", # Class
         "submit": "cbi-button-apply", # Class
