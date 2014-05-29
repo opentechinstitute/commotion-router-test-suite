@@ -8,7 +8,7 @@ import objects.browser as cbo
 import objects.router.page.page as cpo
 
 
-class TestFirefoxAdmin(cbo.CRBrowserTestContext):
+class TestFirefoxAdmin(cbo.BrowserTestContext):
     """Tests of privileged Commotion Router web functions"""
 
     # Override default profile (None)
@@ -20,7 +20,7 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
         Use admin profile to bypass DOM-less self-signed cert error.
         Calls login page object.
         """
-        login = cpo.CRLoginPageObjects(self.browser)
+        login = cpo.CRLoginPage(self.browser)
         self.assertTrue(login.password_required(self.browser), 
                         'Admin pages not password protected')
 
@@ -30,7 +30,7 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
         Calls login page object
         """
         password = "garbage\n"
-        login = cpo.CRLoginPageObjects(self.browser)
+        login = cpo.CRLoginPage(self.browser)
         self.assertTrue(login.incorrect_pass_returns_error(
             self.browser, password),
             'Failed login does not return error'
@@ -44,7 +44,7 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
         Password should be defined at runtime
         """
         password = "garbage\n"
-        login = cpo.CRLoginPageObjects(self.browser)
+        login = cpo.CRLoginPage(self.browser)
         self.assertTrue(login.correct_pass_allows_access(
             self.browser, password),
             'Login form does not allow access on correct password'
@@ -57,7 +57,7 @@ class TestFirefoxAdmin(cbo.CRBrowserTestContext):
         """
         from objects.malicious_strings import MALICIOUS_STRINGS
         buggy_strings = []
-        login = cpo.CRLoginPageObjects(self.browser)
+        login = cpo.CRLoginPage(self.browser)
         for _, malicious in enumerate(MALICIOUS_STRINGS):
             print malicious
             # Test each string. Save failures until the end

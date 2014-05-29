@@ -4,7 +4,7 @@ import logging
 import objects.router.router as cro
 from selenium import webdriver
 
-class CRBrowserTestContext(unittest.TestCase):
+class BrowserTestContext(unittest.TestCase):
     """Browser config and request methods for live commotion router testing"""
 
     browser = "firefox"
@@ -37,7 +37,7 @@ class CRBrowserTestContext(unittest.TestCase):
         #cls.netinfo = {}
         #cls.profile = None
         cls.browser = None
-        logging.info("CRBrowserTestContext destroyed")
+        logging.info("BrowserTestContext destroyed")
 
     def setUp(self):
         """Set up browser"""
@@ -48,7 +48,7 @@ class CRBrowserTestContext(unittest.TestCase):
         self.browser.quit()
         logging.info("Browser instance destroyed")
 
-### Move request_browser and init_profile into CRBrowserTestContext 
+### Move request_browser and init_profile into BrowserTestContext 
 def request_browser(req_browser, req_profile):
     """Just a wrapper for the browser init functions"""
     __profile = None
