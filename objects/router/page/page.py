@@ -148,13 +148,13 @@ class CRHomePage(CRCommonPage):
             return True
 
 
-class CRLoginPageObjects(CRCommonPage):
+class CRLoginPage(CRCommonPage):
     """Page objects specific to Commotion Router login page.
         Note that the login page triggers a DOM-less cert error
     """
 
     def __init__(self, browser):
-        super(CRLoginPageObjects, self).__init__()
+        super(CRLoginPage, self).__init__()
         __sb = browser
         self.page_url = ('https://' + CRCommonPage.commotion_node_ip
             + '/cgi-bin/luci/admin')
