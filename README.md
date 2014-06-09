@@ -49,6 +49,7 @@ _______________
 Resources
 _________
 
+* http://pytest.org/latest/example/
 * http://pytest.org/latest/contents.html
 * http://engineeringquality.blogspot.com/2012/12/python-quick-and-dirty-pageobject.html
 * http://pragprog.com/magazines/2010-08/page-objects-in-python
