@@ -24,6 +24,7 @@ Required Packages
 _________________
 
 + Python (2.7)
++ Python development libraries
 + Bunch
 + Pytest
 + Netifaces
