@@ -15,9 +15,15 @@ inefficient to do so, but are included as simple examples of test structure.
 Usage
 _____
 
-`python run_tests.py`
+`py.test` to run all available tests, or 
+`py.test tests/test_commotion_router_admin.py` to run a specific set of tests
 
-run_tests.py contains pytest command line options.
+Pytest will automatically discover any tests using its defined naming conventions.
+
+Pytest command line defaults are set in the file pytest.ini.
+Pytest behavior can be configured using the file tests/conftest.py.
+
+See the [Pytest documentation](http://pytest.org/latest/) for details.
 
 
 Required Packages
