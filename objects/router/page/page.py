@@ -44,7 +44,7 @@ class CRCommonPage(object):
 
 
     # This is dumb and duplicative. We only need node_ip.
-    __, commotion_client_ip = cro.get_commotion_client_ip()
+    _, commotion_client_ip = cro.get_commotion_client_ip()
     commotion_node_ip = cro.get_commotion_node_ip(commotion_client_ip)
 
 
@@ -61,9 +61,10 @@ class CRCommonPage(object):
             print(__sb.current_url + " matches " + page_url)
         except AssertionError:
             print("Rendered url %s does not match expected url %s" % (
-                    __sb.current_url, page_url))
+                __sb.current_url, page_url
+                ))
 
- 
+
     def wait_for_page_load(self, __sb):
         """Tell selenium to wait for locator before proceeding"""
         print("Waiting for presence of known-good page element")
@@ -73,16 +74,16 @@ class CRCommonPage(object):
         except NoSuchElementException:
             message = "Page element 'device' not found!"
             print(message)
-            raise message
+            raise Exception(message)
         else:
             print("%s loaded successfully" % __sb.current_url)
 
     def wait_for_element_of_type(self, __sb, etype, element):
         """
-        Tell selenium to wait for a specific locator of specific type 
+        Tell selenium to wait for a specific locator of specific type
         before proceeding.
 
-        Valid types: ID, CLASS_NAME, CSS_SELECTOR, LINK_TEXT, NAME, 
+        Valid types: ID, CLASS_NAME, CSS_SELECTOR, LINK_TEXT, NAME,
             PARTIAL_LINK_TEXT, TAG_NAME, XPATH
         """
         print("Waiting for %s, type %s" % (element, etype))
@@ -90,7 +91,7 @@ class CRCommonPage(object):
             WebDriverWait(__sb, 10).until(
                 EC.presence_of_element_located((
                     (
-                        getattr(By,etype)), element
+                        getattr(By, etype)), element
                     )))
         except NoSuchElementException:
             print("Page element %s of type %s not found!" % (
@@ -112,8 +113,9 @@ class CRHomePage(CRCommonPage):
     def __init__(self, browser):
         super(CRHomePage, self).__init__()
         __sb = browser
-        self.page_url = ('https://' + CRCommonPage.commotion_node_ip
-            + '/cgi-bin/luci')
+        self.page_url = (
+            'https://' + CRCommonPage.commotion_node_ip + '/cgi-bin/luci'
+            )
         self._verify_correct_page(__sb, self.page_url)
 
 
@@ -157,13 +159,14 @@ class CRLoginPage(CRCommonPage):
     def __init__(self, browser):
         super(CRLoginPage, self).__init__()
         __sb = browser
-        self.page_url = ('https://' + CRCommonPage.commotion_node_ip
-            + '/cgi-bin/luci/admin')
+        self.page_url = (
+            'https://' + CRCommonPage.commotion_node_ip + '/cgi-bin/luci/admin'
+            )
         self._verify_correct_page(__sb, self.page_url)
 
     def password_required(self, __sb):
-        """Admin pages should require a password if stok url token is not 
-        present.
+        """
+        Admin pages should require a password if stok url token is not present.
         """
         print("Checking for password field...")
         try:
@@ -192,8 +195,7 @@ class CRLoginPage(CRCommonPage):
             self, __sb, "CLASS_NAME", LOCATORS["login"]["error"]
             )
         # Rewrite as try/except NoSuchElementException/else
-        if __sb.find_element_by_class_name(
-            LOCATORS["login"]["error"]).is_displayed():
+        if __sb.find_element_by_class_name(LOCATORS["login"]["error"]).is_displayed():
             print("Login page displays error message on incorrect password")
             return True
         else:
@@ -202,8 +204,9 @@ class CRLoginPage(CRCommonPage):
             return False
 
     def correct_pass_allows_access(self, __sb, password):
-        """Correct password in login form should allow access to admin 
-        pages"""
+        """
+        Correct password in login form should allow access to admin pages
+        """
         pass
 
 

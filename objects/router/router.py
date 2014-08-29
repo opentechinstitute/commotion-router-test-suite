@@ -1,12 +1,11 @@
 """Test components specific to Commotion Routers"""
-from objects.util import error
 import bunch
 import netifaces as ni
 import re
 
-# To do: 
+# To do:
 # 1. (This doesn't actually need to be a class)
-# 2. separate get_net_info into component methods 
+# 2. separate get_net_info into component methods
 
 
 #class CommotionNetworkComponent(object):
@@ -38,8 +37,7 @@ def get_net_info(object):
     print("Commotion Client IP is", commotion_client_ip)
 
     if commotion_client_ip is None:
-        error("No valid Commotion IP address found")
-        raise "No valid Commotion IP address found"
+        raise Exception("No valid Commotion IP address found")
     else:
         commotion_node_ip = get_commotion_node_ip(commotion_client_ip)
 
@@ -74,8 +72,7 @@ def get_commotion_client_ip():
     try:
         commotion_client_ip
     except KeyError:
-        message = "No valid commotion interfaces found"
-        error(message)
+        raise Exception("No valid commotion interfaces found")
 
     # This should only return one thing. Move interfaces somewhere else!
     return commotion_interfaces, commotion_client_ip

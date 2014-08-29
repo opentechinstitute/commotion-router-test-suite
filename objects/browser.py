@@ -48,7 +48,7 @@ class BrowserTestContext(unittest.TestCase):
         self.browser.quit()
         logging.info("Browser instance destroyed")
 
-### Move request_browser and init_profile into BrowserTestContext 
+### Move request_browser and init_profile into BrowserTestContext
 def request_browser(req_browser, req_profile):
     """Just a wrapper for the browser init functions"""
     __profile = None

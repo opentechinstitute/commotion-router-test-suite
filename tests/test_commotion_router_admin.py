@@ -1,5 +1,5 @@
 """Sample automated test suite for commotion router's unprivileged functions.
-    Most of these are an inefficient use of selenium, 
+    Most of these are an inefficient use of selenium,
     but are included as examples.
 """
 
@@ -21,7 +21,7 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
         Calls login page object.
         """
         login = cpo.CRLoginPage(self.browser)
-        self.assertTrue(login.password_required(self.browser), 
+        self.assertTrue(login.password_required(self.browser),
                         'Admin pages not password protected')
 
     def test_login_fail(self):
@@ -31,9 +31,9 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
         """
         password = "garbage\n"
         login = cpo.CRLoginPage(self.browser)
-        self.assertTrue(login.incorrect_pass_returns_error(
-            self.browser, password),
-            'Failed login does not return error'
+        self.assertTrue(
+            login.incorrect_pass_returns_error(self.browser, password),\
+                'Failed login does not return error'
             )
 
     # Will fail until correct pass configured
@@ -45,9 +45,9 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
         """
         password = "garbage\n"
         login = cpo.CRLoginPage(self.browser)
-        self.assertTrue(login.correct_pass_allows_access(
-            self.browser, password),
-            'Login form does not allow access on correct password'
+        self.assertTrue(
+            login.correct_pass_allows_access(self.browser, password),\
+                'Login form does not allow access on correct password'
             )
 
     def test_login_input_validation(self):
@@ -65,10 +65,11 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
             # This test needs revision.
             # 1. exception will probably end the test early
             try:
-                self.assertTrue(login.incorrect_pass_returns_error(
-                    self.browser, malicious),
-                    'Password form does not validate strings correctly'
-                )
+                self.assertTrue(
+                    login.incorrect_pass_returns_error(
+                        self.browser, malicious),\
+                        'Password form does not validate strings correctly'
+                    )
             except ValueError:
                 buggy_strings.append(malicious)
                 print("%s causes login form problems" % malicious)
