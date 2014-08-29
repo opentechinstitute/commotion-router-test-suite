@@ -29,7 +29,7 @@ See the [Pytest documentation](http://pytest.org/latest/) for details.
 Required Packages
 _________________
 
-+ Python (2.7)
++ Python (v3)
 + Python development libraries
 + Bunch
 + Pytest
