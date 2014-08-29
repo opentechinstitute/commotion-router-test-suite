@@ -61,7 +61,7 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
             # Need to reset page after each attempt
             # Otherwise pw fail error stays on screen
             login = cpo.CRLoginPage(self.browser)
-            print malicious
+            print(malicious)
             # This test needs revision.
             # 1. exception will probably end the test early
             try:
@@ -71,7 +71,7 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
                 )
             except ValueError:
                 buggy_strings.append(malicious)
-                print "%s causes login form problems" % malicious
+                print("%s causes login form problems" % malicious)
 
         self.assertEqual(list(buggy_strings), [])
 

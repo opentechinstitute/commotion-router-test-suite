@@ -35,7 +35,7 @@ def get_net_info(object):
 
     interfaces, commotion_client_ip = get_commotion_client_ip()
 
-    print "Commotion Client IP is", commotion_client_ip
+    print("Commotion Client IP is", commotion_client_ip)
 
     if commotion_client_ip is None:
         error("No valid Commotion IP address found")
@@ -60,15 +60,15 @@ def get_commotion_client_ip():
     for iface in interfaces:
         try:
             if ni.ifaddresses(iface)[2][0]['addr'].startswith('10.'):
-                print iface + " has a valid Commotion IP address: " \
-                    + ni.ifaddresses(iface)[2][0]['addr']
+                print(iface + " has a valid Commotion IP address: " \
+                    + ni.ifaddresses(iface)[2][0]['addr'])
                 commotion_client_ip = ni.ifaddresses(iface)[2][0]['addr']
             else:
                 commotion_interfaces[iface] = False
-                print iface + " not valid"
+                print(iface + " not valid")
         except KeyError:
             commotion_interfaces[iface] = True
-            print iface + " has been disconnected"
+            print(iface + " has been disconnected")
             continue
 
     try:
@@ -83,7 +83,7 @@ def get_commotion_client_ip():
 
 def get_commotion_node_ip(commotion_client_ip):
     """Use commotion_client_ip to generate guess commotion node IP"""
-    print "Generating node ip from", commotion_client_ip
+    print("Generating node ip from", commotion_client_ip)
     commotion_node_ip = re.sub(r"(\d+)$", '1', commotion_client_ip)
-    print "node_ip function is returning", commotion_node_ip
+    print("node_ip function is returning", commotion_node_ip)
     return commotion_node_ip

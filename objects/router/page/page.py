@@ -58,24 +58,24 @@ class CRCommonPage(object):
         try:
             # this assert may not work as expected
             assert (__sb.current_url == page_url) is True
-            print __sb.current_url + " matches " + page_url
+            print(__sb.current_url + " matches " + page_url)
         except AssertionError:
-            print "Rendered url %s does not match expected url %s" % (
-                    __sb.current_url, page_url)
+            print("Rendered url %s does not match expected url %s" % (
+                    __sb.current_url, page_url))
 
  
     def wait_for_page_load(self, __sb):
         """Tell selenium to wait for locator before proceeding"""
-        print "Waiting for presence of known-good page element"
+        print("Waiting for presence of known-good page element")
         try:
             WebDriverWait(__sb, 10).until(
                 EC.presence_of_element_located((By.ID, "device")))
         except NoSuchElementException:
             message = "Page element 'device' not found!"
-            print message
+            print(message)
             raise message
         else:
-            print "%s loaded successfully" % __sb.current_url
+            print("%s loaded successfully" % __sb.current_url)
 
     def wait_for_element_of_type(self, __sb, etype, element):
         """
@@ -85,7 +85,7 @@ class CRCommonPage(object):
         Valid types: ID, CLASS_NAME, CSS_SELECTOR, LINK_TEXT, NAME, 
             PARTIAL_LINK_TEXT, TAG_NAME, XPATH
         """
-        print "Waiting for %s, type %s" % (element, etype)
+        print("Waiting for %s, type %s" % (element, etype))
         try:
             WebDriverWait(__sb, 10).until(
                 EC.presence_of_element_located((
@@ -93,11 +93,11 @@ class CRCommonPage(object):
                         getattr(By,etype)), element
                     )))
         except NoSuchElementException:
-            print "Page element %s of type %s not found!" % (
+            print("Page element %s of type %s not found!" % (
                 element, etype
-                )
+                ))
         else:
-            print "Page element %s found." % element
+            print("Page element %s found." % element)
             return True
 
 
@@ -121,17 +121,17 @@ class CRHomePage(CRCommonPage):
         """Check page footer for commotion version number.
         This is actually a common object but common class
         isn't written to accept tests."""
-        print "Checking footer for correct Commotion Revision"
+        print("Checking footer for correct Commotion Revision")
         CRCommonPage.wait_for_element_of_type(
             self, __sb, "CLASS_NAME", LOCATORS["common"]["version"]
             )
-        print "Comparing versions"
+        print("Comparing versions")
         page_rev = __sb.find_element_by_class_name(LOCATORS["common"]
                                                    ["version"])
         # Could also use page_rev.text.endswith(test_rev)
         if test_rev not in page_rev.text:
-            print "Footer version %s does not match test version %s", (
-                page_rev.text, test_rev)
+            print("Footer version %s does not match test version %s", (
+                page_rev.text, test_rev))
             return False
         else:
             return True
@@ -139,13 +139,13 @@ class CRHomePage(CRCommonPage):
 
     def users_can_add_apps(self, __sb):
         """When enabled, unprivileged users can add apps from the homepage"""
-        print "Checking for app add button..."
+        print("Checking for app add button...")
         try:
             __sb.find_element_by_id(LOCATORS["home"]["user-add-app"])
         except NoSuchElementException:
             return False
         else:
-            print "Users can add applications from the homepage"
+            print("Users can add applications from the homepage")
             return True
 
 
@@ -165,21 +165,21 @@ class CRLoginPage(CRCommonPage):
         """Admin pages should require a password if stok url token is not 
         present.
         """
-        print "Checking for password field..."
+        print("Checking for password field...")
         try:
             __sb.find_element_by_id(LOCATORS["login"]["password_field"])
         except NoSuchElementException:
-            print "Login page element %s not found" % (
+            print("Login page element %s not found" % (
                 LOCATORS["login"]["password_field"]
-                )
+                ))
             return False
         else:
-            print "Login page requires a password"
+            print("Login page requires a password")
             return True
 
     def incorrect_pass_returns_error(self, __sb, password):
         """The login form should reject incorrect passwords"""
-        print "Testing user-supplied password"
+        print("Testing user-supplied password")
         __sb.find_element_by_id(
             LOCATORS["login"]["password_field"]
             ).send_keys(password)
@@ -194,11 +194,11 @@ class CRLoginPage(CRCommonPage):
         # Rewrite as try/except NoSuchElementException/else
         if __sb.find_element_by_class_name(
             LOCATORS["login"]["error"]).is_displayed():
-            print "Login page displays error message on incorrect password"
+            print("Login page displays error message on incorrect password")
             return True
         else:
-            print "Login page does not display error message " \
-                "on incorrect password"
+            print("Login page does not display error message " \
+                "on incorrect password")
             return False
 
     def correct_pass_allows_access(self, __sb, password):
