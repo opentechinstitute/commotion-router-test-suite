@@ -28,9 +28,9 @@ import re
 
     #return object
 
-def get_net_info(object):
+def get_net_info():
     """Create object-like dict for netinfo"""
-    object = bunch.Bunch()
+    netobject = bunch.Bunch()
 
     interfaces, commotion_client_ip = get_commotion_client_ip()
 
@@ -41,11 +41,11 @@ def get_net_info(object):
     else:
         commotion_node_ip = get_commotion_node_ip(commotion_client_ip)
 
-    object.update(interfaces)
-    object.update({'commotion_client_ip': commotion_client_ip})
-    object.update({'commotion_node_ip': commotion_node_ip})
+    netobject.update(interfaces)
+    netobject.update({'commotion_client_ip': commotion_client_ip})
+    netobject.update({'commotion_node_ip': commotion_node_ip})
 
-    return object
+    return netobject
 
 
 def get_commotion_client_ip():

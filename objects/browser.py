@@ -21,7 +21,7 @@ class BrowserTestContext(unittest.TestCase):
             This may need to move to pageobjects __init__
         """
         cls.netinfo = {}
-        cls.netinfo = cro.get_net_info(cls.netinfo)
+        cls.netinfo = cro.get_net_info()
 
     @classmethod
     def load_browser(cls, browser, profile):
