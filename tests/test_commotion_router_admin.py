@@ -75,19 +75,3 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
                 print("%s causes login form problems" % malicious)
 
         self.assertEqual(list(buggy_strings), [])
-
-
-
-if __name__ == "__main__":
-    # This is probably wrong
-    def suite():
-        """Gather all tests from this module into a test suite."""
-        test_suite = unittest.TestSuite()
-        test_suite.addTest(unittest.makeSuite(cbo.CRBrowserTestContext))
-        test_suite.addTest(unittest.makeSuite(TestFirefoxAdmin))
-        return test_suite
-    # Fix logging
-    # https://stackoverflow.com/questions/3347019/how-can-one-use-the-logging-module-in-python-with-the-unittest-module
-    BROWSER_SUITE = suite()
-    RUNNER = unittest.TextTestRunner()
-    RUNNER.run(BROWSER_SUITE)
