@@ -1,6 +1,5 @@
 """Profiles and browser definitions for use in unit tests"""
 import unittest
-import logging
 import objects.router.router as cro
 from selenium import webdriver
 
@@ -32,7 +31,6 @@ class BrowserTestContext(unittest.TestCase):
         #cls.netinfo = {}
         #cls.profile = None
         cls.browser = None
-        logging.info("BrowserTestContext destroyed")
 
     def setUp(self):
         """Set up browser"""
@@ -41,7 +39,6 @@ class BrowserTestContext(unittest.TestCase):
     def tearDown(self):
         """Clean up test instance"""
         self.browser.quit()
-        logging.info("Browser instance destroyed")
 
 ### Move request_browser and init_profile into BrowserTestContext
 def request_browser(req_browser, req_profile):
