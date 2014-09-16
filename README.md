@@ -16,7 +16,7 @@ Usage
 _____
 
 `py.test` to run all available tests, or 
-`py.test tests/test_commotion_router_admin.py` to run a specific set of tests
+`py.test tests/<test_file.py>` to run a specific set of tests
 
 Pytest will automatically discover any tests using its defined naming conventions.
 
@@ -36,7 +36,6 @@ _________________
 + Netifaces
 + Selenium
 + Unittest
-+ Logging
 + Random
 
 
