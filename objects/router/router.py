@@ -52,6 +52,7 @@ def get_commotion_client_ip():
     """Check interfaces for a valid commotion client IP address"""
     # Will interface impact commotion tests
     commotion_interfaces = {}
+    commotion_client_ip = None
     # Raw list of interfaces
     # Could be rewritten as for __, iface in enumerate(ni.interfaces())
     interfaces = ni.interfaces()
@@ -80,6 +81,7 @@ def get_commotion_client_ip():
 
 def get_commotion_node_ip(commotion_client_ip):
     """Use commotion_client_ip to generate guess commotion node IP"""
+    commotion_node_ip = None
     print("Generating node ip from", commotion_client_ip)
     commotion_node_ip = re.sub(r"(\d+)$", '1', commotion_client_ip)
     print("node_ip function is returning", commotion_node_ip)
