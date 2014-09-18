@@ -3,6 +3,7 @@
 """
 
 import objects.router.router as cro
+import objects.exceptions as exceptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -44,8 +45,13 @@ class CRCommonPage(object):
 
 
     # This is dumb and duplicative. We only need node_ip.
-    _, commotion_client_ip = cro.get_commotion_client_ip()
-    commotion_node_ip = cro.get_commotion_node_ip(commotion_client_ip)
+    try:
+        _, commotion_client_ip = cro.get_commotion_client_ip()
+    except exceptions.CommotionIPError as args:
+        print(args)
+    else:
+        if commotion_client_ip is not None:
+            commotion_node_ip = cro.get_commotion_node_ip(commotion_client_ip)
 
 
     def _verify_correct_page(self, __sb, page_url):

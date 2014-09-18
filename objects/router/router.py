@@ -1,4 +1,5 @@
 """Test components specific to Commotion Routers"""
+import objects.exceptions as exceptions
 import bunch
 import netifaces as ni
 import re
@@ -31,19 +32,26 @@ import re
 def get_net_info():
     """Create object-like dict for netinfo"""
     netobject = bunch.Bunch()
+    commotion_client_ip = None
+    commotion_node_ip = None
 
     interfaces, commotion_client_ip = get_commotion_client_ip()
 
     print("Commotion Client IP is", commotion_client_ip)
 
-    if commotion_client_ip is None:
-        raise Exception("No valid Commotion IP address found")
+    try:
+        if commotion_client_ip is None:
+            raise exceptions.CommotionIPError(
+                "Connect to a Commotion access point before running tests."
+                )
+    except exceptions.CommotionIPError as args:
+        print(args)
     else:
         commotion_node_ip = get_commotion_node_ip(commotion_client_ip)
-
-    netobject.update(interfaces)
-    netobject.update({'commotion_client_ip': commotion_client_ip})
-    netobject.update({'commotion_node_ip': commotion_node_ip})
+    finally:
+        netobject.update(interfaces)
+        netobject.update({'commotion_client_ip': commotion_client_ip})
+        netobject.update({'commotion_node_ip': commotion_node_ip})
 
     return netobject
 
@@ -71,9 +79,13 @@ def get_commotion_client_ip():
             continue
 
     try:
-        commotion_client_ip
-    except KeyError:
-        raise Exception("No valid commotion interfaces found")
+        if commotion_client_ip is None:
+            #raise CommotionIPError("No valid Commotion interfaces found")
+            raise exceptions.CommotionIPError(
+                "No network interfaces connected."
+                )
+    except (exceptions.CommotionIPError, KeyError) as args:
+        print(args)
 
     # This should only return one thing. Move interfaces somewhere else!
     return commotion_interfaces, commotion_client_ip
