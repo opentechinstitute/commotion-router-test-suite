@@ -45,13 +45,16 @@ class CRCommonPage(object):
 
 
     # This is dumb and duplicative. We only need node_ip.
+    # Try this http://pydanny.com/attaching-custom-exceptions-to-functions-and-classes.html
+    _, commotion_client_ip = cro.get_commotion_client_ip()
     try:
-        _, commotion_client_ip = cro.get_commotion_client_ip()
+        commotion_node_ip = cro.get_commotion_node_ip(commotion_client_ip)
+    except TypeError:
+        raise exceptions.CommotionIPError(
+            'No valid Commotion IP address found'
+            )
     except exceptions.CommotionIPError as args:
         print(args)
-    else:
-        if commotion_client_ip is not None:
-            commotion_node_ip = cro.get_commotion_node_ip(commotion_client_ip)
 
 
     def _verify_correct_page(self, __sb, page_url):

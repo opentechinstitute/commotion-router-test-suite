@@ -8,7 +8,7 @@ class CommotionIPError(ConnectionError):
     Subclass of the built-in ConnectionError base class.
     """
     def __init__(self, value):
-        self.msg = "No valid Commotion IP address found: "
+        self.msg = "Connect to a Commotion AP before running tests: "
         self.value = value
     def __str__(self):
         string = self.msg + repr(self.value)

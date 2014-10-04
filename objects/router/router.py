@@ -32,18 +32,15 @@ import re
 def get_net_info():
     """Create object-like dict for netinfo"""
     netobject = bunch.Bunch()
-    commotion_client_ip = None
-    commotion_node_ip = None
+    #commotion_client_ip = None
+    #commotion_node_ip = None
 
     interfaces, commotion_client_ip = get_commotion_client_ip()
 
     print("Commotion Client IP is", commotion_client_ip)
 
     try:
-        if commotion_client_ip is None:
-            raise exceptions.CommotionIPError(
-                "Connect to a Commotion access point before running tests."
-                )
+        commotion_client_ip is not None
     except exceptions.CommotionIPError as args:
         print(args)
     else:
@@ -79,11 +76,7 @@ def get_commotion_client_ip():
             continue
 
     try:
-        if commotion_client_ip is None:
-            #raise CommotionIPError("No valid Commotion interfaces found")
-            raise exceptions.CommotionIPError(
-                "No network interfaces connected."
-                )
+        commotion_client_ip
     except (exceptions.CommotionIPError, KeyError) as args:
         print(args)
 
