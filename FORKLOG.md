@@ -6,6 +6,7 @@ areynold/master differs from oti/master in the following ways:
 + merge python3 branch to master
 + create admin-profile branch
 + create ap-exception branch
++ merge ap-exception to admin-profile
 
 Admin-Profile Summary
 _____________________
@@ -22,3 +23,8 @@ ____________________
 Adds a custom exception to accurately identify a test host that
 has not been connected to a Commotion access point. Closes 
 https://github.com/opentechinstitute/commotion-router-test-suite/issues/8
+
+To test the AP exception:
+1. Run py.test while not connected to a Commotion node. Execution should fail,
+and your traceback should include instructions to connect to a Commotion AP
+before running the tests.
