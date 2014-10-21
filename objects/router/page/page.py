@@ -29,7 +29,7 @@ LOCATORS = {
     },
     "admin": {
         "url-stok": False,
-        "logout": False,
+        "logout": "Logout",  # Link_Text
     },
 }
 
@@ -216,8 +216,26 @@ class CRLoginPage(CRCommonPage):
         """
         Correct password in login form should allow access to admin pages
         """
-        pass
+        print("Testing user-supplied password")
+        __sb.find_element_by_id(
+            LOCATORS["login"]["password_field"]
+            ).send_keys(password)
 
+        if "\n" not in password:
+            # Click submit if password doesn't have a newline
+            __sb.find_element_by_class_name("cbi-button-apply").click()
+
+        CRCommonPage.wait_for_element_of_type(
+            self, __sb, "LINK_TEXT", LOCATORS["admin"]["logout"]
+        )
+
+        # Rewrite as try/except NoSuchElementException/else
+        if __sb.find_element_by_link_text(LOCATORS["admin"]["logout"]).is_displayed():
+            print("Login successful")
+            return True
+        else:
+            print("Login unsuccessful")
+            return False
 
 
 class CRAdminPage(CRCommonPage):
