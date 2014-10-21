@@ -7,6 +7,7 @@ import unittest
 import objects.browser as cbo
 import objects.router.page.page as cpo
 import configparser
+import pytest
 
 
 class TestFirefoxAdmin(cbo.BrowserTestContext):
@@ -43,18 +44,17 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
                 'Failed login does not return error'
             )
 
-    # Will fail until correct pass configured
-    @unittest.expectedFailure
+    @pytest.mark.xfail(admin_password == "ChangeMe",
+                       reason="Will fail until correct pass set in pytest.ini")
     def test_login_succeed(self):
         """
         Correct password should allow access to admin functions.
         Password should be defined at runtime
         """
-        password = "garbage\n"
         login = cpo.CRLoginPage(self.browser)
         self.assertTrue(
-            login.correct_pass_allows_access(self.browser, password),\
-                'Login form does not allow access on correct password'
+            login.correct_pass_allows_access(self.browser, self.admin_password),\
+            'Login form does not allow access on correct password'
             )
 
     def test_login_input_validation(self):
