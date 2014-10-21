@@ -45,6 +45,7 @@ _______________
 + tests/ - Unit tests, separated by type or profile
 + objects/ - All objects used in the tests
   + browser.py - Objects representing the browser/user
+  + exceptions.py - Commotion-specific exceptions
   + malicious_strings.py - Standard strings for use in input validation tests
   + util.py - Utility functions
   + router/ - Objects used in router-based tests
