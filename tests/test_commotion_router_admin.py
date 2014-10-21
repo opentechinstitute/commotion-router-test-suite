@@ -6,6 +6,7 @@
 import unittest
 import objects.browser as cbo
 import objects.router.page.page as cpo
+import configparser
 
 
 class TestFirefoxAdmin(cbo.BrowserTestContext):
@@ -13,6 +14,12 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
 
     # Override default profile (None)
     profile = "firefox_admin"
+
+    # Set router username and password
+    config = configparser.ConfigParser()
+    config.read('pytest.ini')
+    admin_password = config.get('admin_common', 'admin_password')
+    admin_user = config.get('admin_common', 'admin_user')
 
     def test_require_admin_password(self):
         """
