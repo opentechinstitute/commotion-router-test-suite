@@ -25,7 +25,7 @@ config options in a single file.
 To test:
 1. Connect to a Commotion node.
 2. Run `py.test tests/test_commotion_router_admin.py`. 
-The test_login_succeed test should fail.
+The test_login_succeed test should return an expected failure (pytest xfail).
 3. Open pytest.ini and change admin_password to the correct node password.
 4. Rerun `py.test tests/test_commotion_router_admin.py`. test_login_succeed
 should pass. test_login_fail should also pass (meaning bad values are
