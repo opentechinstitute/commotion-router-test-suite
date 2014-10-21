@@ -2,4 +2,3 @@ __pycache__/
 .pyt
 .pyc
 .kate-swp
-pytest.ini  # Avoid accidental credential upload
