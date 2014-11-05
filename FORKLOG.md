@@ -7,6 +7,7 @@ areynold/master differs from oti/master in the following ways:
 + create admin-profile branch
 + create ap-exception branch
 + merge ap-exception to admin-profile
++ merge admin-profile to master
 + create ignore branch
 + merge ignore branch to master
 
