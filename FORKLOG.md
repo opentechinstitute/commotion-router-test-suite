@@ -7,6 +7,8 @@ areynold/master differs from oti/master in the following ways:
 + create admin-profile branch
 + create ap-exception branch
 + merge ap-exception to admin-profile
++ create ignore branch
++ merge ignore branch to master
 
 Admin-Profile Summary
 _____________________
@@ -21,6 +23,14 @@ Implemented as an additional configparser section in the existing
 pytest.ini file. Could also be implemented as a constant in config.py,
 then imported as needed, but it seemed beneficial to keep all test
 config options in a single file.
+
+Pytest uses a session-scoped, autouse fixture (defined in tests/conftest.py)
+to check for pytest.ini. If no file is found, a clean copy will be created
+using an example file.
+
+Tests using the admin credentials should test for the default password
+(ChangeMe), and use pytest.mark.xfail to trigger an expected failure
+until the default password is changed.
 
 To test:
 1. Connect to a Commotion node.
