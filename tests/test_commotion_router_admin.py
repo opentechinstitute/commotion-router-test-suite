@@ -1,11 +1,13 @@
 """Sample automated test suite for commotion router's unprivileged functions.
-    Most of these are an inefficient use of selenium, 
+    Most of these are an inefficient use of selenium,
     but are included as examples.
 """
 
 import unittest
 import objects.browser as cbo
 import objects.router.page.page as cpo
+import configparser
+import pytest
 
 
 class TestFirefoxAdmin(cbo.BrowserTestContext):
@@ -14,6 +16,12 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
     # Override default profile (None)
     profile = "firefox_admin"
 
+    # Set router username and password
+    config = configparser.ConfigParser()
+    config.read('pytest.ini')
+    admin_password = config.get('admin_common', 'admin_password')
+    admin_user = config.get('admin_common', 'admin_user')
+
     def test_require_admin_password(self):
         """
         Make sure a password is required for admin pages.
@@ -21,7 +29,7 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
         Calls login page object.
         """
         login = cpo.CRLoginPage(self.browser)
-        self.assertTrue(login.password_required(self.browser), 
+        self.assertTrue(login.password_required(self.browser),
                         'Admin pages not password protected')
 
     def test_login_fail(self):
@@ -31,22 +39,21 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
         """
         password = "garbage\n"
         login = cpo.CRLoginPage(self.browser)
-        self.assertTrue(login.incorrect_pass_returns_error(
-            self.browser, password),
-            'Failed login does not return error'
+        self.assertTrue(
+            login.incorrect_pass_returns_error(self.browser, password),\
+                'Failed login does not return error'
             )
 
-    # Will fail until correct pass configured
-    @unittest.expectedFailure
+    @pytest.mark.xfail(admin_password == "ChangeMe",
+                       reason="Will fail until correct pass set in pytest.ini")
     def test_login_succeed(self):
         """
         Correct password should allow access to admin functions.
         Password should be defined at runtime
         """
-        password = "garbage\n"
         login = cpo.CRLoginPage(self.browser)
-        self.assertTrue(login.correct_pass_allows_access(
-            self.browser, password),
+        self.assertTrue(
+            login.correct_pass_allows_access(self.browser, self.admin_password),\
             'Login form does not allow access on correct password'
             )
 
@@ -61,32 +68,17 @@ class TestFirefoxAdmin(cbo.BrowserTestContext):
             # Need to reset page after each attempt
             # Otherwise pw fail error stays on screen
             login = cpo.CRLoginPage(self.browser)
-            print malicious
+            print(malicious)
             # This test needs revision.
             # 1. exception will probably end the test early
             try:
-                self.assertTrue(login.incorrect_pass_returns_error(
-                    self.browser, malicious),
-                    'Password form does not validate strings correctly'
-                )
+                self.assertTrue(
+                    login.incorrect_pass_returns_error(
+                        self.browser, malicious),\
+                        'Password form does not validate strings correctly'
+                    )
             except ValueError:
                 buggy_strings.append(malicious)
-                print "%s causes login form problems" % malicious
+                print("%s causes login form problems" % malicious)
 
         self.assertEqual(list(buggy_strings), [])
-
-
-
-if __name__ == "__main__":
-    # This is probably wrong
-    def suite():
-        """Gather all tests from this module into a test suite."""
-        test_suite = unittest.TestSuite()
-        test_suite.addTest(unittest.makeSuite(cbo.CRBrowserTestContext))
-        test_suite.addTest(unittest.makeSuite(TestFirefoxAdmin))
-        return test_suite
-    # Fix logging
-    # https://stackoverflow.com/questions/3347019/how-can-one-use-the-logging-module-in-python-with-the-unittest-module
-    BROWSER_SUITE = suite()
-    RUNNER = unittest.TextTestRunner()
-    RUNNER.run(BROWSER_SUITE)

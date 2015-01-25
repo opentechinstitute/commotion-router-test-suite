@@ -1,6 +1,5 @@
 """Profiles and browser definitions for use in unit tests"""
 import unittest
-import logging
 import objects.router.router as cro
 from selenium import webdriver
 
@@ -10,18 +9,13 @@ class BrowserTestContext(unittest.TestCase):
     browser = "firefox"
     profile = "default"
 
-    #logging.basicConfig(filename='../logs/test_commotion_router_ui.log',
-                        #level=logging.INFO)
-    #logging.warning("Specify path to log directory")
-    #logging.warning("This test suite needs a UI map!")
-
     @classmethod
     def setUpClass(cls):
         """Get information about net interfaces and target commotion node
             This may need to move to pageobjects __init__
         """
         cls.netinfo = {}
-        cls.netinfo = cro.get_net_info(cls.netinfo)
+        cls.netinfo = cro.get_net_info()
 
     @classmethod
     def load_browser(cls, browser, profile):
@@ -37,7 +31,6 @@ class BrowserTestContext(unittest.TestCase):
         #cls.netinfo = {}
         #cls.profile = None
         cls.browser = None
-        logging.info("BrowserTestContext destroyed")
 
     def setUp(self):
         """Set up browser"""
@@ -46,9 +39,8 @@ class BrowserTestContext(unittest.TestCase):
     def tearDown(self):
         """Clean up test instance"""
         self.browser.quit()
-        logging.info("Browser instance destroyed")
 
-### Move request_browser and init_profile into BrowserTestContext 
+### Move request_browser and init_profile into BrowserTestContext
 def request_browser(req_browser, req_profile):
     """Just a wrapper for the browser init functions"""
     __profile = None

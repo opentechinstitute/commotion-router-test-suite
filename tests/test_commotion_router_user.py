@@ -27,18 +27,3 @@ class TestFirefoxUnprivileged(cbo.BrowserTestContext):
         home = cpo.CRHomePage(self.browser)
         self.assertFalse(home.users_can_add_apps(self.browser),
                          'Default app permissions incorrect')
-
-
-if __name__ == "__main__":
-    # This is probably wrong
-    def suite():
-        """Gather all tests from this module into a test suite."""
-        test_suite = unittest.TestSuite()
-        test_suite.addTest(unittest.makeSuite(TestFirefoxUnprivileged))
-        return test_suite
-    # Fix logging
-    # https://stackoverflow.com/questions/3347019/\
-    #    how-can-one-use-the-logging-module-in-python-with-the-unittest-module
-    BROWSER_SUITE = suite()
-    RUNNER = unittest.TextTestRunner()
-    RUNNER.run(BROWSER_SUITE)

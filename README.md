@@ -15,22 +15,27 @@ inefficient to do so, but are included as simple examples of test structure.
 Usage
 _____
 
-`python run_tests.py`
+`py.test` to run all available tests, or 
+`py.test tests/<test_file.py>` to run a specific set of tests
 
-run_tests.py contains pytest command line options.
+Pytest will automatically discover any tests using its defined naming conventions.
+
+Pytest command line defaults are set in the file pytest.ini.
+Pytest behavior can be configured using the file tests/conftest.py.
+
+See the [Pytest documentation](http://pytest.org/latest/) for details.
 
 
 Required Packages
 _________________
 
-+ Python (2.7)
++ Python (v3)
 + Python development libraries
 + Bunch
 + Pytest
 + Netifaces
 + Selenium
 + Unittest
-+ Logging
 + Random
 
 
@@ -39,13 +44,14 @@ _______________
 
 + tests/ - Unit tests, separated by type or profile
 + objects/ - All objects used in the tests
-++ browser.py - Objects representing the browser/user
-++ malicious_strings.py - Standard strings for use in input validation tests
-++ util.py - Utility functions
-++ router/ - Objects used in router-based tests
-+++ router.py - router-specific node objects
-+++ page/ - Objects found only in router-based UI pages
-++++ page.py - Page definitions for router-based nodes
+  + browser.py - Objects representing the browser/user
+  + exceptions.py - Commotion-specific exceptions
+  + malicious_strings.py - Standard strings for use in input validation tests
+  + util.py - Utility functions
+  + router/ - Objects used in router-based tests
+    + router.py - router-specific node objects
+    + page/ - Objects found only in router-based UI pages
+      + page.py - Page definitions for router-based nodes
 
 
 Resources

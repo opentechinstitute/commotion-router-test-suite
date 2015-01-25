@@ -1,12 +1,12 @@
 """Test components specific to Commotion Routers"""
-from objects.util import error
+import objects.exceptions as exceptions
 import bunch
 import netifaces as ni
 import re
 
-# To do: 
+# To do:
 # 1. (This doesn't actually need to be a class)
-# 2. separate get_net_info into component methods 
+# 2. separate get_net_info into component methods
 
 
 #class CommotionNetworkComponent(object):
@@ -29,53 +29,56 @@ import re
 
     #return object
 
-def get_net_info(object):
+def get_net_info():
     """Create object-like dict for netinfo"""
-    object = bunch.Bunch()
+    netobject = bunch.Bunch()
+    #commotion_client_ip = None
+    #commotion_node_ip = None
 
     interfaces, commotion_client_ip = get_commotion_client_ip()
 
-    print "Commotion Client IP is", commotion_client_ip
+    print("Commotion Client IP is", commotion_client_ip)
 
-    if commotion_client_ip is None:
-        error("No valid Commotion IP address found")
-        raise "No valid Commotion IP address found"
+    try:
+        commotion_client_ip is not None
+    except exceptions.CommotionIPError as args:
+        print(args)
     else:
         commotion_node_ip = get_commotion_node_ip(commotion_client_ip)
+    finally:
+        netobject.update(interfaces)
+        netobject.update({'commotion_client_ip': commotion_client_ip})
+        netobject.update({'commotion_node_ip': commotion_node_ip})
 
-    object.update(interfaces)
-    object.update({'commotion_client_ip': commotion_client_ip})
-    object.update({'commotion_node_ip': commotion_node_ip})
-
-    return object
+    return netobject
 
 
 def get_commotion_client_ip():
     """Check interfaces for a valid commotion client IP address"""
     # Will interface impact commotion tests
     commotion_interfaces = {}
+    commotion_client_ip = None
     # Raw list of interfaces
     # Could be rewritten as for __, iface in enumerate(ni.interfaces())
     interfaces = ni.interfaces()
     for iface in interfaces:
         try:
             if ni.ifaddresses(iface)[2][0]['addr'].startswith('10.'):
-                print iface + " has a valid Commotion IP address: " \
-                    + ni.ifaddresses(iface)[2][0]['addr']
+                print(iface + " has a valid Commotion IP address: " \
+                    + ni.ifaddresses(iface)[2][0]['addr'])
                 commotion_client_ip = ni.ifaddresses(iface)[2][0]['addr']
             else:
                 commotion_interfaces[iface] = False
-                print iface + " not valid"
+                print(iface + " not valid")
         except KeyError:
             commotion_interfaces[iface] = True
-            print iface + " has been disconnected"
+            print(iface + " has been disconnected")
             continue
 
     try:
         commotion_client_ip
-    except KeyError:
-        message = "No valid commotion interfaces found"
-        error(message)
+    except (exceptions.CommotionIPError, KeyError) as args:
+        print(args)
 
     # This should only return one thing. Move interfaces somewhere else!
     return commotion_interfaces, commotion_client_ip
@@ -83,7 +86,8 @@ def get_commotion_client_ip():
 
 def get_commotion_node_ip(commotion_client_ip):
     """Use commotion_client_ip to generate guess commotion node IP"""
-    print "Generating node ip from", commotion_client_ip
+    commotion_node_ip = None
+    print("Generating node ip from", commotion_client_ip)
     commotion_node_ip = re.sub(r"(\d+)$", '1', commotion_client_ip)
-    print "node_ip function is returning", commotion_node_ip
+    print("node_ip function is returning", commotion_node_ip)
     return commotion_node_ip
